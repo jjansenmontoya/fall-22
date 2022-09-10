@@ -28,11 +28,12 @@ inline size_t right(size_t i)
 //    the value a[i] might be too *big* and need to be moved
 //    *closer* to the root.
 template <typename T>
-void bubbleUp(std::vector<T> &a, size_t i)
+size_t bubbleUp(std::vector<T> &a, size_t i)
 {
     // Sanity-check that we're bubbling an element that exists.
     assert(i < a.size());
 
+     size_t swaps = 0;
     // Stop looping if we've bubbled all the way to the root (index 0)
     while (i != 0)
     {
@@ -45,6 +46,7 @@ void bubbleUp(std::vector<T> &a, size_t i)
             // The parent's value is too small.
             // Swap the a[i] with the parent's value.
             std::swap(a[i], a[p]);
+            swaps += 1;
             // continue looping, but set i to the parent's location
             // so that the value we are bubbling up can still be found
             // at location a[i].
@@ -57,7 +59,7 @@ void bubbleUp(std::vector<T> &a, size_t i)
             break;
         }
     }
-    return;
+    return swaps;
 }
 
 // sinkDown(a,i)
@@ -65,11 +67,12 @@ void bubbleUp(std::vector<T> &a, size_t i)
 //    be too *small* (smaller that at least one child) and might need to be
 //    moved *further* from the root of the tree.
 template <typename T>
-void sinkDown(std::vector<T> &a, size_t i)
+size_t sinkDown(std::vector<T> &a, size_t i)
 {
     // Sanity-check that we're sinking an element that exists.
     assert(i < a.size());
 
+    size_t swaps = 0;
     while (true)
     {
         // We want c to be the index of the child with the larger value
@@ -97,6 +100,7 @@ void sinkDown(std::vector<T> &a, size_t i)
             // violation of the maxheap property. Swap a[i]
             // with its larger child
             std::swap(a[i], a[c]);
+            swaps += 1;
             // And update i so that the value we are moving downwards
             // can still be found at location a[i].
             i = c;
@@ -109,7 +113,7 @@ void sinkDown(std::vector<T> &a, size_t i)
             break;
         }
     }
-    return;
+    return swaps;
 }
 
 // Check whether the given array is in maxheap-order
@@ -127,15 +131,13 @@ void assertMaxheap(const std::vector<T> &a)
 template <typename T>
 void heapify_topdown(std::vector<T> &a)
 {
+    size_t swaps = 0;
     // TODO  (2-5 lines of code)
-    return;
-}
-
-// Heapify the given vector using the bottom-up algorithm.
-template <typename T>
-void heapify_bottomup(std::vector<T> &a)
-{
-    // TODO  (2-6 lines of code)
+    for (size_t i = 0; i < a.size(); ++i) 
+    {
+        swaps += bubbleUp(a, i);
+    }
+    std::cout << "num swaps " << swaps << "\n";
     return;
 }
 
@@ -149,6 +151,19 @@ void dumpVec(const std::vector<T> &a)
         std::cout << " " << x;
     }
     std::cout << "\n";
+}
+
+// Heapify the given vector using the bottom-up algorithm.
+template <typename T>
+void heapify_bottomup(std::vector<T> &a)
+{
+    size_t swaps = 0;
+    for (size_t i = a.size()-1; i >= 0 && i <= a.size(); --i) 
+    {
+        swaps += sinkDown(a, i);
+    }
+    std::cout << "num swaps " << swaps << "\n";
+    return;
 }
 
 //
@@ -185,31 +200,30 @@ int main(int argc, char **argv)
     for (int i = 0; i < experiments; ++i)
     {
         // Randomly shuffle the numbers 0...heapsize-1
-        std::cerr << "shuffling the starting array...\n";
+       // std::cerr << "shuffling the starting array...\n";
         std::shuffle(a0.begin(), a0.end(), g);
-        std::cerr << "done\n";
+       /* std::cerr << "done\n";
         // dumpVec(a0)
-
+    */
         // Heapify a copy of the numbers using the top-down method
-        std::cerr << "copy 1...\n";
+        // std::cerr << "copy 1...\n";
         auto a1 = a0;
         std::cerr << "top_down heapify...\n";
         heapify_topdown(a1);
         // dumpVec(a1)
-        std::cerr << "checking heap order...\n";
+        //std::cerr << "checking heap order...\n";
         assertMaxheap(a1);
-        std::cerr << "done\n";
+        // std::cerr << "done\n";
 
         // Heapify a copy of the numbers using the bottom-up method
-        std::cerr << "copy 2...\n";
+        // std::cerr << "copy 2...\n";
         auto a2 = a0; // Use the same random array
-        std::cerr << "bottom_up heapify...\n";
+        std::cerr << "bottom_up heapify..." << "\n";
         heapify_bottomup(a2);
-        // dumpVec(a2)
-        std::cerr << "checking heap order...\n";
+        // dumpVec(a2);
+        // std::cerr << "checking heap order...\n";
         assertMaxheap(a2);
-        std::cerr << "done\n";
+        // std::cerr << "done\n";
     }
-
     std::cout << "The End\n";
 }
