@@ -1,0 +1,83 @@
+\documentclass[10pt]{article}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb, graphicx, multicol, array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\date{Due: Sep 13, 2022 10pm PT}
+
+\begin{document}
+ 
+\title{Assignment 2}
+\author{
+CS 181AG: Network Algorithmics}
+\maketitle
+
+This assignment will help you understand how to extend LANs. It includes a coding component, short-answer questions related to your code, and a reading assignment with questions.  
+
+ 
+\begin{problem}{1: Learning Bridges}
+Assignment2.py simulates creating 5 LANs, with a total of 7 nodes attached to them and 2 bridges, each containing three ports,  connecting them. It will be very helpful to you to draw the setup.
+
+\begin{enumerate}
+    \item After you've taken some time to familiarize yourself with the code, send a message from A to B by adding to the bottom of main: ``A.send\_message(B)''. List all the nodes that hear the message, whether it was intended for them or not (you need not include the sender). Then, send a message from B to A. List all the nodes that receive the message, whether it was intended for them or not. Why is this inefficient? What is the key functionality of bridges that is missing?
+    \item Fix the above issue by editing the ``receive\_message'' function in the Bridge class. You may add any necessary variables to the class. Now repeat the two steps from \#1 and for each, list the nodes that hear the message. This is the final version of your code.
+    \item Draw the state of B1 and B2's learning tables after both these messages are sent. 
+    \item For each of the following, list the nodes that hear the message and draw the learning tables for B1 and B2. If your implementation is correct, you \emph{can} simply add print statements and run your code to get these answers. However, for practice, I encourage you to solve them using your own logic and then verify using your code. 
+    \begin{enumerate}
+        \item E sends a message to A
+        \item C sends a message to F
+        \item D sends a message to F
+        \item B sends a message to C
+    \end{enumerate}
+    
+    \item For the next sub-question, \textbf{assume all learning tables are empty and we have not run the spanning tree protocol}. Describe briefly what would happen if we added another bridge, B3, and another LAN L6, with B3's port-to-LAN mapping {P1: L2, P2: L3, P3: L6}, and then sent a message from C to D.
+\end{enumerate}
+\end{problem}
+\begin{problem} {2: Spanning Tree}
+\begin{enumerate}
+    \item Consider the practice problem from class (slide 34). We decided that when running the spanning tree protocol, B3, B6, and B7 had one of the ports shut off. For B3, write out the messages it would send and receive (and to/from which bridges) until convergence (i.e., messages don't change), following the format from class (Me, Root, Hops). To start: 
+    
+    Round 1:
+    
+    Send: (B3, B3, 0) to B2 and B5
+    
+    Receive: (B2, B2, 0) from B2
+    
+    Receive: (B5, B5, 0) from B5
+    
+    Round 2:
+    
+    ...
+    
+    
+   \item Repeat the above for bridge B7.
+   \item The Spanning Tree Protocol was invented by Radia Perlman, one of the internet pioneers who also loved writing and composing music. \href{https://www.youtube.com/watch?v=iE_AbM8ZykI}{Here} she is, sharing the STP with the world. No work here, just for your enjoyment :)
+    
+\end{enumerate}
+\end{problem}
+\begin{problem}{3: Reading}
+The pandemic has sparked a recent debate about whether the internet should be treated and regulated like a public utility. A quick Google search should give you plenty of articles supporting each side. Read one article in support of treating the internet like a public utility and one against. Paste both urls and summarize the main points for each. Write a couple sentences articulating your thoughts after reading both. Points are for effort.
+\end{problem}
+\begin{problem}{4}
+How long did this assignment take you?
+\end{problem}
+\begin{problem}{5: Extra (optional) reading}
+\href{https://www.pewresearch.org/internet/2021/09/01/the-internet-and-the-pandemic/}{Here} is a Pew Research Center article about how Internet usage (both numbers and sentiments) changed during the pandemic. It also includes some stats about equity in internet access. There is no work or credit or extra credit associated with reading this - just more information if it interests you. 
+\end{problem}
+
+\newpage
+
+\subsection*{Answers}
+    \begin{enumerate}
+       \item If we are sending a message from $A$ to $B$, the following nodes hear the message: B, C, D, E, F, G. This is inefficient since B recieved the message meant for them first, but the message remained on the line and all other nodes heard the message, thus meaning that a message was on the line for far longer than necessary. The key functionality of bridges that is missing is selective forwarding which would prevent the "flooding" of messages to the other LANs.
+       \item 
+    \end{enumerate}
+\end{document}

@@ -1,0 +1,10 @@
+install.packages('faraway')
+library(faraway)
+
+data(gala, package = 'faraway')
+head(gala[,-2])
+lmod <- lm(Species ~ Elevation + Adjacent, data = gala)
+summary(lmod)
+
+require(faraway)
+summary(lmod)

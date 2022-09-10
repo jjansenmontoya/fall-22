@@ -1,0 +1,94 @@
+\documentclass[10pt]{article}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb, graphicx, multicol, array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\date{Due: Sep 6, 2022 10pm PT}
+
+\begin{document}
+ 
+\title{Assignment 1}
+\author{
+CS 181AG: Network Algorithmics}
+\maketitle
+
+This assignment will help you understand media access control, or how multiple nodes share one channel. It includes a coding component, short-answer questions, and a reading assignment with questions.  
+
+ 
+\begin{problem}{1: Responding to Collisions}
+Our problem starts when N senders using the same channel want to send at the same time. Assume we have time slots, represented as integers, so they all send at the same slot (curr\_time=0). assignment1.py on the course page (under Assignments - Additional Resources) has an outline of this situation. Each node is initialized with time\_to\_send set to 0, causing the collision between N$>$1 nodes. However, the current version does not recover from collisions at all; that is, all transmissions involved in a collision are simply dropped. Since the process continues until every node has successfully transmitted, there is currently an infinite loop.
+\begin{enumerate}[label=(\alph*)]
+\item Your job is to implement a collision recovery process using a \textbf{0.5-persistent method with exponential backoff}. This is not a CSMA protocol, i.e., you do not need to implement any listening logic. p-persistence applies to each node's probability of transmitting at any time slot. Note that the currently empty retransmit function in the Node class should be called and completed (see Python's random library). 
+
+For implementing exponential backoff, use the number chosen to determine the number of time slots to wait before retransmitting (i.e., your program should not be using Python's time library; time is only represented by integers). Remember though that adding 0 to time\_to\_send causes the frame to never be sent. 
+
+Run simulate\_collision with N=5, 20 and 40 and for each, report 1) the time at which the last node successfully transmitted and 2) the number of collisions (take the average of 3 runs for each). Briefly explain the trend you see and why. 
+
+\item Your current implementation uses a p-persistent method where p = 0.5. What is an optimal value for p relative to N? Why? Rerun the above three scenarios using this value and report the same metrics: 1) the time at which the last node successfully transmitted and 2) the number of collisions (take the average of 3 runs for each). This is the final version of what you will implement - please submit this version of your code.
+
+\item The version of media access control that became the classic Ethernet (802.3), was hugely successful. Name one similarity and one difference between what you implemented and 802.3. 
+
+\item What would be the problem if instead of exponential backoff, each node just retransmitted in the next slot (i.e., we incremented time\_to\_send by 1)?
+
+\end{enumerate}
+\end{problem}
+\begin{problem}{2: Channel Capture}
+Suppose we have two nodes, A and B. Each has a steady queue of frames ready to send. A's frames are denoted $A_{1}, A_{2}, \ldots$ and B's frames are denoted similarly. They both send at the same time and a collision ensues. They both choose between values {0, 1} and happen to choose backoff times of 0 and 1, respectively, so A ``wins the race'' and transmits $A_{1}$. When B tries to retransmit $B_{1}$, A tries to transmit $A_{2}$. This results in another collision.
+\begin{enumerate}[label=(\alph*)]
+\item In this second collision, from what set of values does A choose \textit{k} for its exponential backoff? From what set of values does B choose \textit{k} for its exponential backoff? Who is more likely to transmit first, i.e., win the race?
+\item Suppose A wins again and successfully transits $A_{2}$. When B again tries to retransmit $B_{1}$, A tries to transmit $A_{3}$. This results in a third collision. In this third collision, from what set of values does A choose \textit{k} for its exponential backoff? From what set of values does B choose \textit{k} for its exponential backoff? Who is more likely to transmit first?
+\item Explain why this is unfair. Is this more or less likely to be a problem when there are many nodes as opposed to just two?
+\end{enumerate}
+\end{problem}
+\begin{problem}{3: Reading}
+Read \href{https://modernmobile.cs.washington.edu/docs/abc.pdf}{this} paper about backscatter networks and answer the following questions. Reminder: do not try to absorb every detail of the paper, just the high-level idea. Points are for effort.
+\begin{enumerate}
+    \item List and define three terms you either learned or learned more about
+    \item In class, we learned about. collision detection and collision avoidance. Which do you think would be a better fit for backscatter communication?
+    \item What would the impact be if backscatter networking became mainstream?
+\end{enumerate}
+\end{problem}
+\begin{problem}{4}
+How long did this assignment take you?
+\end{problem}
+\begin{problem}{5: Extra (optional) reading}
+\href{https://www.microsoft.com/en-us/research/uploads/prod/2019/08/Strobe_camera_ready-1.pdf}{Here} is a more recent paper about using backscatter networking in agriculture. There is no work or credit or extra credit associated with reading this - just more information about current research directions in this area if it interests you. 
+\end{problem}
+
+\newpage
+
+\subsection*{Answers}
+
+\begin{enumerate}
+    \item \begin{enumerate}[label=(\alph*)] 
+        \item The answers will reported in the form $(N, collisions)$ where $collisions$ is the average over 10 runs. The answers were of the form $(5, 4.3), (20,20.5),$ and $(50, 53.5)$ It would appear that as $N$ increases, there is a seemingly linear increase in the number of collisions as $N$, the number of nodes, increases.
+        \item The optimal value for $p$ relative to $N$ would be $p = \frac{1}{N}$, as this would, ideally, mean that each collision, only one node would attempt to resend immediately. Using this strategy, we obtained results of over 10 trials, $(N, collisions)$, (5,2.3), (20, 12.7), and (50, 37.1).
+        \item One difference between the version of media access control that became the classic Ethernet and my implementation is that the Ethernet utilized 1-persistent CSMA/CD, but one similarlity between the two implementations is the utilization of exponential backoff.
+        \item If we simply had each node attempt to retransmit in the next slot, then we would have an endless cycle of collisions, as the same two nodes would then collide at the next transmission slot each time.
+    \end{enumerate}
+    \item \begin{enumerate}[label=(\alph*)] 
+        \item For the second collision, $A$ chooses from the set $\{0, 1\}$ where as $B$ chooses from the set $\{0,1, 2, 3\}$ since this is $B$'s second attempt at the first message $B_1$, but $A$'s first attempt at the second message $A_2$. $A$ is most likely to win the race, assuming equal selection probability from each set respectively.
+        \item For the third collision between the two nodes, $A$ chooses from the set $\{0, 1\}$ where as $B$ chooses from the set $\{0,1, 2, 3, 5, 6, 7\}$ since this is $B$'s third attempt at the first message $B_1$, but $A$'s first attempt at the third message. $A$ is once again most likely to win the race, assuming equal selection probability from each set respectively.
+        \item This is unfair because, as we have seen, $A$ is likely to win every single race between $A$ and $B$ which in turn means that each message that $A$ sends would be selecting from a smaller set of values for exponential backoff which means that the node is once again more likely to be able to send the message. This leads to $A$ being able to send messages while $B$ cannot. This is less likely to be a problem in the case of many nodes as opposed to just two because of the fact that as we increase the number of nodes, each time that we utilize exponential backoff, the distribution of when the nodes will send their message will tend to spread out greater, leading to no one node to dominate.
+    \end{enumerate}
+    \item \begin{enumerate}[label=(\alph*)] 
+        \item \begin{enumerate}
+            \item I was unfamiliar with the phrase "backscatter" before this reading. From Wikipedia and via the reading, I understand backscatter to be the reflection of waves (such as the ambient RF mentioned in the paper), back in the direction that they come from.
+            \item Prior to reading the paper, I was unfamiliar with what exactly an RFID-backscatter is, though I have heard the phrase "RFID" used before. Using help from techtarget.com, I can see that RFID stands for "radio frequency idenitification", and is a type of wireless communication that utilizes electromagnetic fields given off by particular objects.
+            \item Finally, prior to reading the paper, I had never heard the term "modulation" used before in the context of wireless communication. However, modulation refers to the switching on and off of transmitting a particular signal, such as a 1 or a 0.  
+        \end{enumerate}
+        \item I would think that collision detectionw ould be a better fit for the backscatter communication since if you were to use the collision avoidance and send out a jamming signal when a collision is detected would have detrimental effects on the ambient waves that are being used for their backscatter. This jamming could result in a disturbance for the existing TV signals that would not otherwise be present and thus had adverse effects.
+        \item The impact scoped out by the paper if backscatter networking became mainstream would be the ability to communicate between devices without the need for batteries or wires and that said communication would be done between devices "at unprecedented scasles and in locations that were previously incaccessible" as described in the abstract. More specifically, the paper discusses implimenting this backscatter communication in a smart card application in which "passive cards communicate with each other anywhere". Some more specific implementations included "money transfer between credit cards, paying bills in a restaurant by siping the credit card on the bill, or to implement a digital paper technology which can display digital information using e-ink". Another envisioned implementation is in grocery stores to monitor whether or not a product is in its proper place, or outside of its proper place.
+    \end{enumerate}
+    \item This homework took me $\approx 5.5$ hours.
+\end{enumerate}
+
+\end{document}
