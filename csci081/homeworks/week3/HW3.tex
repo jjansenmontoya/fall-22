@@ -1,0 +1,163 @@
+\documentclass[12pt]{article}
+\usepackage{geometry}
+\usepackage{enumerate}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{etoolbox}
+\usepackage{graphicx}
+\usepackage{framed}
+\usepackage{tikzsymbols}
+\usepackage{hyperref}
+
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\TURN}{\vdash}
+\newcommand{\IMPLIES}{\rightarrow}
+
+
+\newtheorem{definition}{Definition}
+
+\newcommand{\WT}[1]{\begin{framed} \noindent \textbf{What's the Rationale?} #1 \end{framed}}
+
+
+\newcommand{\DoNotShare}{\large \noindent \textbf{Under the Harvey Mudd Honor Code, this document is not to be shared.} \normalsize}
+\newcommand{\Problem}[3]{\mbox{} \newline \noindent \textbf{\textbf{Challenge #1: #2 [#3 Points] \\ }}}
+
+\begin{document}
+
+\begin{center}
+	\bf
+	CS 81, Logic and Computability  \\
+	Problem Set 3:  First-Order Predicate Logic and Prolog \\
+\end{center}
+
+Please watch the Prolog video lecture before embarking on the Prolog part of this assignment. Online Prolog interpreters such as SWISH (\href{https://swish.swi-prolog.org/}{https://swish.swi-prolog.org/}) are available. Some students prefer those environments to running \texttt{swipl} locally.
+
+\Problem{1}{Translating from English to Logic with Moose and Aardvarks}{20}
+
+This problem is sponsored by the International Society of Moose and Aardvarks Owners (ISMAO).
+Let $L$ denote a binary predicate representing the \emph{Likes} relation (so that $L(x, y)$ means that $x$ likes $y$) on a domain of people.
+Let $A$ be a unary predicate denoting whether its argument owns an aardvark and let $M$ be a unary predicate indicating whether its argument owns a moose.
+Express each of the following English statements using these three predicates and the operators of first-order predicate logic. \textbf{ Keep your expressions as simple as possible and push your quantifiers as far to the left as possible.}
+
+\begin{enumerate}
+	\item Everyone likes some person who owns an aardvark and a moose.
+	\item There is someone who owns a moose who likes every aardvark owner.
+	\item For every pair of people who don't own aardvarks, if the first likes the second then the second likes the first.
+	\item For every pair of people who own different animals (one a moose only, the other an aardvark only) those people either both like one another or both dislike one another. 
+	\item For every three moose owners, if the first likes the second and the second likes the third then the first likes the third.  (Transitive liking of moose owners!)
+\end{enumerate}
+
+\subsection*{Answer 1}
+\begin{enumerate}
+	\item $\forall x \exists y (L(x,y) \IMPLIES  (A(y) \AND M(y)))$
+	\item $\forall x \exists y ((M(y) \AND A(x))\IMPLIES L(y,x))$
+	\item $\forall x, y ((\neg A(x) \AND \neg A(y)) \IMPLIES L(x,y) \IMPLIES L(y,x))$
+	\item $ \forall x, y (((A(x) \AND A(y))) \OR (M(x) \AND M(y)))\IMPLIES ((L(x,y) \leftrightarrow L(y,x))) \OR (\neg (L(x,y)) \leftrightarrow \neg L(y,x)))$
+	\item $ \forall x,y,z ((M(x)\AND M(y)\AND M(z) \AND L(x,y) \AND L(y,z))\implies L(x,z) )$
+\end{enumerate}
+
+\Problem{2}{Translating from Logic to English}{10}
+
+Translate each of the following predicate logic statements into English with the same meaning for predicates $L$, $A$, and $M$ as in the previous problem.  Keep your English statements as simple and concise as possible.
+\begin{enumerate}
+	\item $\forall x \exists y \ (L(x, y) \AND \neg L(y, x))$
+	\item $\exists x \ (M(x) \AND \forall y \ (A(y) \IMPLIES \neg L(x, y)))$
+	\item $\forall x \forall y \ (L(x, y) \rightarrow \forall z (L(x, z) \rightarrow L(y, z)))$
+	\item $\forall x \forall y \ (L(x, y) \rightarrow \exists z (L(x, z) \rightarrow L(y, z)))$
+	\item $\exists x \ (M(x) \rightarrow \forall y \ M(y))$
+\end{enumerate}
+
+\subsection*{Answer 2}
+\begin{enumerate}
+	\item Everyone likes someone who does not like them back.
+	\item There is some mooose owner who dislikes all ardvark owners.
+	\item For all pairs of people if the first likes the second means that the first likes all other people, then the second person also likes everyone that the first likes.
+	\item For all pairs of individuals, if the first likes the second, then there exists some individual that if the first person likes, then the second also likes that person.
+	\item If there is someone who owns a moose, then everyone owns a moose.
+\end{enumerate}
+
+\Problem{3}{Validity!}{15}
+
+For each of the following statements, explain in one sentence why it is true.
+
+\begin{enumerate}
+	\item $\neg \forall x \ P(x) \IMPLIES \exists x \ \neg P(x)$
+	\item $\neg \exists x \ P(x) \IMPLIES \forall x \ \neg P(x)$
+	\item $(\exists x \ A(x)) \IMPLIES ((\forall x \ M(x)) \IMPLIES (\exists x \ M(x)))$
+\end{enumerate}
+
+\subsection*{Answer}
+\begin{enumerate}
+	\item If we cannot say that for all $x$ that $P(x)$ holds, then there must be some element in our domain for which $P(x)$ does not hold, and thus, that there is some element for which $\neg P(x)$ holds.
+	\item If there does not exist a single element for which $P(x)$ holds, then it must be true that $\neg P(x)$ holds for all elements since $P(x)$ either takes on false or true.
+	\item If our first predicate is true, meaning that we can find someone who owns an ardvark, then we get to know that everyone owns a moose, which naturally implies that we can come up with someone who owns a moose (choose someone from our domain which we know is non-empty and that everyone owns a moose).
+\end{enumerate}
+
+\Problem{4}{A Matter of Interpretation!}{15}
+
+For each of the statements below, describe two interpretations:  One in which the statement is true and the other for which it is not true.  If possible, the domain that you describe should be finite and as small as possible. State the domain (a set) and interpretation of each predicate (the elements in the domain for which that predicate is true) explicitly and then explain clearly why the statement is either true or not true in the given interpretation (remember, you'll do two interpretations for each of these three subproblems):
+
+\begin{enumerate}
+	\item $(\forall x \ A(x)) \OR \neg \exists x \ M(x)$
+	\item $(\exists x \ A(x)) \IMPLIES ( \forall y \ A(y) )$
+	\item $((\forall x \ A(x)) \IMPLIES (\forall x \ M(x))) \IMPLIES \forall x \ (A(x) \IMPLIES M(x))$
+\end{enumerate}
+
+\subsection*{Answer}
+\begin{enumerate}
+	\item For the true case, consider the set $\{x\}$ with the property that $A(x)$ holds, which means that the whole statement holds since it is an or statement. Now, for the false case, consider the same set, except for if $A(x)$ does not hold, but that $M(x)$ does hold. Then we can see that neither of our parts of the or statement hold, and thus, the whole statement does not hold.
+	\item For the true case, consider the set $\{x\}$ with the property that $A(x)$ holds and that then, since $x$ is the only element of the set, $A(y)$ holds for elements in the set. However, for the false case, consider the set $\{x,y\}$ such that $A(x)$ is true but $A(y)$ is false. Then we can see the whole expression does not hold and evaluates to false since $1 \IMPLIES 0$ evaluates to false.
+	\item For the true case, consdier the set $\{x\}$ with the property that $A(x), M(x)$ both hold. For the false case, consider the set $\{x,y\}$ with the property that $A(x)$ is true, $A(y)$ is false, $M(x)$ is false and $M(y)$ is true. We can see then that the first part of our expression will evaluate to true since $0 \implies 0$, but then that our second part of the statement will be false since we can see clearly that the implication does not hold for all elements in our set, and thus, our statement evaluates to false overall.
+\end{enumerate}
+
+\Problem{5}{A First Taste Prolog!}{20}
+
+Write a predicate called \verb+count(X, L, N)+ that is true if and only if item \verb+X+ occurs exactly \verb+N+ times in list \verb+L+.  For example:
+	\begin{verbatim}
+	count(spam, [oh, spam, spam, we, love, spam], N).  % user query
+	N = 3 ;    % prolog replies.  We type ; to ask if there's any more
+	false      % nope, no  more!
+	
+	count(X, [oh, spam, spam, we, love, spam], N).  % user query
+	X = oh,
+	N = 1 ;    % any more?
+	X = spam,
+	N = 3 ;    % any more?
+	X = we,
+	N = 1 ;    % any more?
+	X = love,
+	N = 1 ;    % any more?
+	N = 0.
+\end{verbatim}
+	 
+	 There's a good chance that your code will report more options, including that ``spam'' occurs 3 times but also twice and also once.  That's an error and it's likely due to the order in which things appear.  This is a good opportunity to think carefully about why order matters.  By the way, the ``N = 0'' is fine, but it's OK if your code also doesn't produce this.
+
+     Use the starter file \verb+count.pl+ to write your code, and do not change the filename when you upload to Gradescope.
+	
+\Problem{6}{Prolog in Depth!}{20}
+
+Write a predicate called \verb+depth(E, Tree, N)+ that is true if and only if element \verb+E+ is at depth \verb+N+ in the given binary search tree \verb+Tree+ in \verb+[Root, Left, Right]+ format.  Here's more explanation:
+	 A binary search tree can be represented as either an empty list, \verb+[]+, or a list of the form \verb+[Root, Left, Right]+ where \verb+Root+ is a number and \verb+Left+ and \verb+Right+ are themselves binary search trees in which all of the items in \verb+Left+ are less than or equal to \verb+Root+ and all items in \verb+Right+ are greater than \verb+Root+.  For example, here's a predicate that defines a small binary search tree represented in this way:
+	\begin{verbatim}
+	tree([42, [5, [], []], [47, [],	[50, [], []]]]).
+	\end{verbatim}
+	
+	The depth of an item in the tree is 0 if its at the root, 1 if its parent is the root, 2 if its parent's parent is at the root, and so forth.  Here are some examples using the tree defined above:
+	\begin{verbatim}
+	?- tree(T), depth(42, T, N).
+	T = [42, [5, [], []], [47, [], [50, [], []]]],
+	N = 0 ; % any more?
+	false.
+	
+	?- tree(T), depth(50, T, N).
+	T = [42, [5, [], []], [47, [], [50, [], []]]],
+	N = 2 ; % any more?
+	false.
+	\end{verbatim}
+	
+	You may assume that we'll only test the \verb+depth+ predicate on items that are in the tree and that each item in the tree only appears once.
+
+    Use the starter file \verb+depth.pl+ to write your code, and do not change the filename when you upload to Gradescope.
+
+\end{document}

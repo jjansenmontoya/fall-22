@@ -1,0 +1,166 @@
+---
+title: "HW 4 Math158"
+author: "Joshua Jansen-Montoya"
+date: '2022-09-29'
+output: pdf_document
+---
+
+### Problem 4.1
+For the prostate data, fit a model with lpsa as the response and the other variables as predictors.
+1. Suppose a new patient with the following values arrives: lcavol = 1.44692, lweight = 3.62301 age = 65, lbph = 0.30010, svi = 0, lcp = -0.79851, gleason = 7, pgg45 = 15. Predict the lpsa for this patient along with an appropriate 95% CI.
+2. Repeat the last question for a patient with the same values except that he is age 20. Explain why the CI is wider.
+3. For the model of the previous question, remove all the predictors that are not significant at the 5% level. Now recompute the predictions of the previous question. Are the CIs wider or narrower? Which predictions would you prefer? Explain.
+
+### Answer 4.1
+1. We can predict the lpsa for this patient using the following R-code,
+```{r 4.1a}
+  library(faraway)
+  reg <- lm(lpsa ~ lcavol + lweight + age + lbph + svi + lcp + gleason + pgg45, data = prostate)
+  predict(reg, data.frame(lcavol = 1.44692, lweight = 3.62301, age = 65, lbph = 0.30010, svi = 0, lcp = -0.79851, gleason = 7, pgg45 = 15))
+  predict(reg,new=data.frame(lcavol = 1.44692, lweight = 3.62301, age = 65, lbph = 0.30010, svi = 0, lcp = -0.79851, gleason = 7, pgg45 = 15),interval="confidence")
+```
+  We can see that our predicted value for the lpsa for the patient is 2.389053. Looking at our data, we can see that our 95% confidence interval is (2.17, 2.61).
+2. Now, repeating the first part with the age 20, we can find that,
+```{r 4.1b}
+library(faraway)
+  reg <- lm(lpsa ~ lcavol + lweight + age + lbph + svi + lcp + gleason + pgg45, data = prostate)
+  predict(reg,new=data.frame(lcavol = 1.44692, lweight = 3.62301, age = 20, lbph = 0.30010, svi = 0, lcp = -0.79851, gleason = 7, pgg45 = 15),interval="confidence")
+```
+ which gives us a 95% confidence interval of (2.26, 4.29). We can note that our CI is far larger, which is due to the fact that we are extrapolating from the data set, since a majority of the data is for ages greater than 20.
+ 3. We can first find all the predictors that are not significant at a 95% confidence interval as follows,
+```{r 4.1ca}
+  library(faraway)
+  reg <- lm(lpsa ~ lcavol + lweight + age + lbph + svi + lcp + gleason + pgg45, data = prostate)
+  summary(reg)
+```
+Thus, we can see that we can remove everything except for lcavol, lweight, and svi. Doing so, we can check our predictions using the same values as above (removing the non-95% significant values) to find our confidence intervals as follows,
+```{r 4.1cb}
+  library(faraway)
+  regNew <- lm(lpsa ~ lcavol + lweight + svi, data = prostate)
+  predict(regNew, data.frame( lcavol = 1.44692, lweight = 3.62301, svi = 0), interval = 'confidence')
+```
+We can see that we get a 95% confidence interval of (2.20, 2.55), which is a more narrow CI than our prior values. We would prefer this model, as since the 95% CI is more narrow and since we have removed the non-significant predictors, we can conclude that we have more trust in our model and thus, we the predictions as well.
+
+### Problem 4.2
+Using the teengamb data, fit a model with gamble as the response and the other variables as predictors.
+1. Predict the amount that a male with average (given these data) status, income and verbal score would gamble along with an appropriate 95% CI.
+2. Repeat the prediction for a male with maximal values (for this data) of status, income and verbal score. Which CI is wider and why is this result expected?
+3. Fit a model with sqrt(gamble) as the response but with the same predictors. Now predict the response and give a 95% prediction interval for the individual in (a). Take care to give your answer in the original units of the response.
+4. Repeat the prediction for the model in (c) for a female with status=20, income=1, verbal = 10. Comment on the credibility of the result.
+
+### Answer 4.2
+1. We can compute these values as follows,
+```{r 4.2a}
+  library(faraway)
+  reg <- lm(gamble ~ sex + status + income + verbal, data = teengamb)
+  x <- model.matrix(reg)
+  (x0 <- apply(x,2,function(x) mean(x)))
+  predict(reg, data.frame(sex = 0, status = 45.2340426, income = 4.6419149, verbal =  6.6595745 ), interval = 'confidence')
+```
+  We can see that our predicted gambling output is 28.25 pounds per week with a confidence interval of (18.78, 37.70) as desired.
+2. We can compute these values as follows,
+```{r 4.2b}
+  library(faraway)
+  reg <- lm(gamble ~ sex + status + income + verbal, data = teengamb)
+  x <- model.matrix(reg)
+  (x0 <- apply(x,2,function(x) max(x)))
+  predict(reg, data.frame(sex = 0, status = 75, income = 15, verbal =  10 ), interval = 'confidence')
+```
+We can see that our predicted gambling output is 71.31 pounds per week with a confidence interval of (42.23, 100.38) as desired. The wide CI is with our maximum of each of the predictive intervals since We can note that our CI is far larger, which is due to the fact that we are extrapolating from the data set since we are focusing on the maximums of some of our predictor variables.
+3. We can compute these values as follows,
+```{r 4.2c}
+  library(faraway)
+  reg <- lm(sqrt(gamble) ~ sex + status + income + verbal, data = teengamb)
+  predict(reg, data.frame(sex = 0, status = 45.2340426, income = 4.6419149, verbal =  6.6595745 ), interval = 'confidence')
+```
+We can see that the our predicted gambling expenditure per week is 16.40 pounds per week with a confidence interval of (10.11, 24.21) by squaring our output values.
+4. We can compute these values as follows,
+```{r 4.3d}
+  library(faraway)
+  reg <- lm(sqrt(gamble) ~ sex + status + income + verbal, data = teengamb)
+  predict(reg, data.frame(sex = 1, status = 20, income = 1, verbal =  10 ), interval = 'confidence')
+```
+ Using the model to predict with our given inputs, we can see that our results are not very credible since it is impossible to spend negative money as a gambling expenditure (unless you are talking about winning money).
+ 
+### Problem 4.3
+The snail dataset contains percentage water content of the tissues of snails grown under three different levels of relative humidity and two different temperatures.
+1. Use the command xtabs(water ~ temp + humid, snail)/4 to produce a table of mean water content for each combination of temperature and humidity. Can you use this table to predict the water content for a temperature of 25◦C and a humidity of 60%? Explain.
+2. Fit a regression model with the water content as the response and the temperature and humidity as predictors. Use this model to predict the water content for a temperature of 25◦C and a humidity of 60%?
+3. Use this model to predict water content for a temperature of 30◦C and a hu midity of 75%? Compare your prediction to the prediction from (a). Discuss the relative merits of these two predictions.
+4. The intercept in your model is 52.6%. Give two values of the predictors for which this represents the predicted response. Is your answer unique? Do you think this represents a reasonable prediction?
+5. For a temperature of 25◦C, what value of humidity would give a predicted response of 80% water content.
+
+### Answer 4.3
+1. Using the give command, we can see,
+```{r 4.3a}
+  library(faraway)
+  xtabs(water ~ temp + humid, snail)/4
+```
+I would say that we can make a strong prediction, since we can assume that $\frac{69.4-72.5}{10}$ give us a linear coefficient for the impact of each degree C would have on the water content past 20C, and similarly that $\frac{81.50-72.50}{30}$ would give us the impact of each percent increase in humidity would have on the water conent pas 45% humidity, thus giving us an estimation of $72.5 + 15*\frac{81.50-72.50}{30} + 5*\frac{69.4-72.5}{10} = 75.45$.
+2. We can fit the model and predict the water content for the given values as follows,
+```{r 4.3b}
+  library(faraway)
+  reg <- lm(water ~ temp + humid, data = snail)
+  predict(reg, data.frame(temp = 25, humid = 60 ), interval = 'confidence')
+```
+which gives us prediction of 76.44% water content.
+3. We can fit the model and predict the water content for the given values as follows,
+```{r 4.3c}
+  library(faraway)
+  reg <- lm(water ~ temp + humid, data = snail)
+  predict(reg, data.frame(temp = 30, humid = 75 ), interval = 'confidence')
+  summary(reg)
+```
+We can see that our calculated value for our prediction function does not match up with our prior calculated value, and more specifically, we can see that the earlier calculated value does not even fit into our 95% CI calculated by our prediction model. I would give greater trust to the table of mean water content for each combination of temperature and humidity since this takes the average over all of the 30, 75 pairs, whereas our model accounts for all other points as well when calculating the regression line.
+4. Two values of the predictors would be the pair (0,0), and (2.5827196858, 1) that would represent this response. These answers are not unique, and I think that the model provides an accurate prediction for particular values, but not for the two mentioned values.
+5. For a temperature of 25C, the humidity that would give a percentage water content of 80% would be 67.5% humidity, which we can calculate since $80 = 25*-0.18333 + 0.47349x + 52.61081 \implies x = 67.5$ percent humidity.
+
+### Problem 4.5
+For the fat data used in this chapter, a smaller model using only age, weight, height and abdom was proposed on the grounds that these predictors are either known by the individual or easily measured.
+1. Compare this model to the full thirteen-predictor model used earlier in the chapter. Is it justifiable to use the smaller model?
+2. Compute a 95% prediction interval for median predictor values and compare to the results to the interval for the full model. Do the intervals differ by a practically important amount?
+3. For the smaller model, examine all the observations from case numbers 25 to 50. Which two observations seem particularly anomalous?
+4. Recompute the 95% prediction interval for median predictor values after these two anomalous cases have been excluded from the data. Did this make much difference to the outcome?
+
+### Answer 4.5
+1. We can compare the two models by using an anova test as follows,
+```{r 4.5a}
+  library(faraway)
+  regFull <- lm(brozek ~ age + weight + height + neck + chest + abdom + hip + thigh + knee + ankle + biceps + forearm + wrist, data=fat)
+  regReduce <- lm(brozek ~ age + weight + height + abdom, data=fat)
+  anova(regReduce, regFull)
+```
+Comparing the two models together, we can see from the anova test that since our p-value is less than 0.05, that we can reject the null hypothesis in favor of the full model.
+2. We can compute the 95% prediction interval for the two models for the median predictor values as follow,
+```{r 4.5b}
+  library(faraway)
+  regFull <- lm(brozek ~ age + weight + height + neck + chest + abdom + hip + thigh + knee + ankle + biceps + forearm + wrist, data=fat)
+  regReduce <- lm(brozek ~ age + weight + height + abdom, data=fat)
+  x <- model.matrix(regFull)
+ (xFull <- apply(x,2,median))
+  y <- model.matrix(regReduce)
+  (xReduce <- apply(y,2,median))
+  predict(regFull, data.frame(t(xFull)), interval = 'confidence')
+  predict(regReduce, data.frame(t(xReduce)), interval = 'confidence')
+```
+After computing the two confidence intervals, we can see that the two confidence intervals do not differ by a practically important ammount.
+3. We can view all of the observations as follows,
+```{r 4.5c}
+  library(faraway)
+  regFull <- lm(brozek ~ age + weight + height + neck + chest + abdom + hip + thigh + knee + ankle + biceps + forearm + wrist, data=fat)
+  regReduce <- lm(brozek ~ age + weight + height + abdom, data=fat)
+  y <- model.matrix(regReduce)
+  y
+```
+The observations that seem anamolous are observations 39 and 42.
+4. We can remove the observations as follows,
+```{r 4.5d}
+  library(faraway)
+  regFull <- lm(brozek ~ age + weight + height + neck + chest + abdom + hip + thigh + knee + ankle + biceps + forearm + wrist, data=fat[-c(39,42),])
+  y <- model.matrix(regReduce)
+  (xReduce <- apply(y,2,median))
+  predict(regReduce, data.frame(t(xReduce)), interval = 'confidence')
+```
+We can note that removing these values does not really change our outcomes with our CI in a meaningful way for the reduced model.
+
+

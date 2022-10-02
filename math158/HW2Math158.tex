@@ -1,0 +1,641 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={HW2},
+  pdfauthor={Joshua Jansen-Montoya},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{HW2}
+\author{Joshua Jansen-Montoya}
+\date{2022-09-13}
+
+\begin{document}
+\maketitle
+
+\hypertarget{problem-2.2}{%
+\subsubsection{Problem 2.2}\label{problem-2.2}}
+
+The dataset \(uswages\) is drawn as a sample from the Current Population
+Survey in 1988. Fit a model with weekly wages as the response and years
+of education and experience as predictors. Report and give a simple
+interpretation to the regression coefficient for years of education. Now
+fit the same model but with logged weekly wages. Give an interpretation
+to the regression coefficient for years of education. Which
+interpretation is more natural?
+
+\hypertarget{answwer-2.2}{%
+\subsubsection{Answwer 2.2}\label{answwer-2.2}}
+
+First, we will fit the model with the weekly wages as the response and
+the years of education and experience as the predictors with the
+following R code.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \FunctionTok{library}\NormalTok{(faraway)}
+  \FunctionTok{summary}\NormalTok{(uswages)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       wage              educ           exper            race      
+##  Min.   :  50.39   Min.   : 0.00   Min.   :-2.00   Min.   :0.000  
+##  1st Qu.: 308.64   1st Qu.:12.00   1st Qu.: 8.00   1st Qu.:0.000  
+##  Median : 522.32   Median :12.00   Median :15.00   Median :0.000  
+##  Mean   : 608.12   Mean   :13.11   Mean   :18.41   Mean   :0.078  
+##  3rd Qu.: 783.48   3rd Qu.:16.00   3rd Qu.:27.00   3rd Qu.:0.000  
+##  Max.   :7716.05   Max.   :18.00   Max.   :59.00   Max.   :1.000  
+##       smsa             ne              mw               so        
+##  Min.   :0.000   Min.   :0.000   Min.   :0.0000   Min.   :0.0000  
+##  1st Qu.:1.000   1st Qu.:0.000   1st Qu.:0.0000   1st Qu.:0.0000  
+##  Median :1.000   Median :0.000   Median :0.0000   Median :0.0000  
+##  Mean   :0.756   Mean   :0.229   Mean   :0.2485   Mean   :0.3125  
+##  3rd Qu.:1.000   3rd Qu.:0.000   3rd Qu.:0.0000   3rd Qu.:1.0000  
+##  Max.   :1.000   Max.   :1.000   Max.   :1.0000   Max.   :1.0000  
+##        we             pt        
+##  Min.   :0.00   Min.   :0.0000  
+##  1st Qu.:0.00   1st Qu.:0.0000  
+##  Median :0.00   Median :0.0000  
+##  Mean   :0.21   Mean   :0.0925  
+##  3rd Qu.:0.00   3rd Qu.:0.0000  
+##  Max.   :1.00   Max.   :1.0000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{  reg }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(wage }\SpecialCharTok{\textasciitilde{}}\NormalTok{ educ }\SpecialCharTok{+}\NormalTok{ exper, }\AttributeTok{data =}\NormalTok{ uswages)}
+  \FunctionTok{summary}\NormalTok{(reg)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = wage ~ educ + exper, data = uswages)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1018.2  -237.9   -50.9   149.9  7228.6 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) -242.7994    50.6816  -4.791 1.78e-06 ***
+## educ          51.1753     3.3419  15.313  < 2e-16 ***
+## exper          9.7748     0.7506  13.023  < 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 427.9 on 1997 degrees of freedom
+## Multiple R-squared:  0.1351, Adjusted R-squared:  0.1343 
+## F-statistic:   156 on 2 and 1997 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{  reg2}\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(}\FunctionTok{log}\NormalTok{(wage) }\SpecialCharTok{\textasciitilde{}}\NormalTok{ educ }\SpecialCharTok{+}\NormalTok{ exper, }\AttributeTok{data =}\NormalTok{ uswages)}
+  \FunctionTok{summary}\NormalTok{(reg2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = log(wage) ~ educ + exper, data = uswages)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.7533 -0.3495  0.1068  0.4381  3.5699 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 4.650319   0.078354   59.35   <2e-16 ***
+## educ        0.090506   0.005167   17.52   <2e-16 ***
+## exper       0.018079   0.001160   15.58   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.6615 on 1997 degrees of freedom
+## Multiple R-squared:  0.1749, Adjusted R-squared:  0.174 
+## F-statistic: 211.6 on 2 and 1997 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+Looking at the regression coefficient for education, we can see that for
+every year of education that a US male worker has, they can expect to
+make 51.18 dollars more per week. Now, looking at our logged version of
+the weekly wage, we can see that we for every year of education more
+that a US male worker has, they can expect to make 51.18 logged dollars
+per week. The more natural interpretation is the first, non-logged
+weekly wages.
+
+\hypertarget{problem-2.3}{%
+\subsubsection{Problem 2.3}\label{problem-2.3}}
+
+In this question, we investigate the relative merits of methods for
+computing the coefficients. Generate some artificial data by:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{\textgreater{} x \textless{}{-} 1:20}
+\NormalTok{\textgreater{} y \textless{}{-} x + rnorm(20)}
+\end{Highlighting}
+\end{Shaded}
+
+Fit a polynomial in \(x\) for predicting \(y\). Compute \(\hat{\beta}\)
+in two ways, by \(lm()\) and by using the direct calculation described
+in the chapter. At what degree of polynomial does the direct calculation
+method fail? (Note the need for the \(I()\) function in fitting the
+polynomial, that is, \(lm(y ~ x + I(x^2))\).
+
+\hypertarget{answer-2.3}{%
+\subsubsection{Answer 2.3}\label{answer-2.3}}
+
+First, we will compute \(\hat{\beta}\) by means of \(lm()\). In doing
+so, we can use the following R code snippet to find the relevant
+calculation.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{  x }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{:}\DecValTok{20}
+\NormalTok{  y }\OtherTok{\textless{}{-}}\NormalTok{ x }\SpecialCharTok{+} \FunctionTok{rnorm}\NormalTok{(}\DecValTok{20}\NormalTok{)}
+  \FunctionTok{lm}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = y ~ x)
+## 
+## Coefficients:
+## (Intercept)            x  
+##     -0.1224       1.0095
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \CommentTok{\# direct calculation}
+  \FunctionTok{solve}\NormalTok{(}\FunctionTok{crossprod}\NormalTok{(x,x),}\FunctionTok{crossprod}\NormalTok{(x,y))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          [,1]
+## [1,] 1.000523
+\end{verbatim}
+
+Looking at our function, we can see that it appears that our value for
+\(\hat{\beta}\) is 0.94. Now, we will use the method of directly
+calculating \(\hat{\beta}\) to get the value of 0.96. Now, after
+iterations, we found that the method breaks for \(x^6\) polynomials, or
+polynomials of the degree 6.
+
+\hypertarget{problem-2.6}{%
+\subsubsection{Problem 2.6}\label{problem-2.6}}
+
+Thirty samples of cheddar cheese were analyzed for their content of
+acetic acid, hydrogen sulfide and lactic acid. Each sample was tasted
+and scored by a panel of judges and the average taste score produced.
+Use the \(cheddar\) data to answer the following: 1) Fit a regression
+model with taste as the response and the three chemical contents as
+predictors. Report the values of the regression coefficients. 2) Compute
+the correlation between the fitted values and the response. Square it.
+Identify where this value appears in the regression output. 3) Fit the
+same regression model but without an intercept term. What is the value
+of \(R^2\) reported in the output? Compute a more reasonable measure of
+the goodness of fit for this example. 4) Compute the regression
+coefficients from the original fit using the QR decomposition showing
+your R code.
+
+\hypertarget{answer-2.6}{%
+\subsubsection{Answer 2.6}\label{answer-2.6}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\tightlist
+\item
+  We can construct the regression model as follows using the R code,
+\end{enumerate}
+
+\begin{verbatim}
+```r
+library(faraway)
+reg <- lm(taste ~ Acetic + H2S + Lactic, data = cheddar)
+summary(reg)
+```
+
+```
+## 
+## Call:
+## lm(formula = taste ~ Acetic + H2S + Lactic, data = cheddar)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -17.390  -6.612  -1.009   4.908  25.449 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)   
+## (Intercept) -28.8768    19.7354  -1.463  0.15540   
+## Acetic        0.3277     4.4598   0.073  0.94198   
+## H2S           3.9118     1.2484   3.133  0.00425 **
+## Lactic       19.6705     8.6291   2.280  0.03108 * 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 10.13 on 26 degrees of freedom
+## Multiple R-squared:  0.6518, Adjusted R-squared:  0.6116 
+## F-statistic: 16.22 on 3 and 26 DF,  p-value: 3.81e-06
+```
+
+```r
+cor(cbind(cheddar$taste, cheddar$Acetic+  cheddar$H2S+  cheddar$Lactic))
+```
+
+```
+##           [,1]      [,2]
+## [1,] 1.0000000 0.7803719
+## [2,] 0.7803719 1.0000000
+```
+
+```r
+reg2 <- lm(taste ~ Acetic + H2S + Lactic -1, data = cheddar)
+summary(reg2)
+```
+
+```
+## 
+## Call:
+## lm(formula = taste ~ Acetic + H2S + Lactic - 1, data = cheddar)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -15.4521  -6.5262  -0.6388   4.6811  28.4744 
+## 
+## Coefficients:
+##        Estimate Std. Error t value Pr(>|t|)    
+## Acetic   -5.454      2.111  -2.583  0.01553 *  
+## H2S       4.576      1.187   3.854  0.00065 ***
+## Lactic   19.127      8.801   2.173  0.03871 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 10.34 on 27 degrees of freedom
+## Multiple R-squared:  0.8877, Adjusted R-squared:  0.8752 
+## F-statistic: 71.15 on 3 and 27 DF,  p-value: 6.099e-13
+```
+\end{verbatim}
+
+We can see then that our regression coefficients are 0.3277 for Acetic
+acid, 3.91 for H2S and 19.67 for Lactic acid with the Acetic and Lactic
+acid being signficant for an \(\alpha = 0.05\) and H2S being significant
+for an \(\alpha = 0\). 2) Using our R code, we can see that our
+correlation matrix gives us correlation between our taste and our fitted
+values of \(0.7804\). Squaring this value, we can see that we get 0.609,
+which we can see is our \(R^2\) statistic. 3) Removing the intercept, we
+can see that we get an \(R^2\) value of 0.8877. Now, a better statistic
+would be to calculate \(\sigma\) for the model, which we can do as
+follows,
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \FunctionTok{library}\NormalTok{(faraway)}
+\NormalTok{    reg2 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(taste }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Acetic }\SpecialCharTok{+}\NormalTok{ H2S }\SpecialCharTok{+}\NormalTok{ Lactic }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, }\AttributeTok{data =}\NormalTok{ cheddar)}
+    \FunctionTok{sigma}\NormalTok{(reg2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 10.34254
+\end{verbatim}
+
+which is a more reasonable measure of the goodness of fit for the model.
+4) Now, using R code to calculate the QR decomposition, we obtain
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \FunctionTok{library}\NormalTok{(faraway)}
+\NormalTok{   x }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{( }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Acetic }\SpecialCharTok{+}\NormalTok{ H2S }\SpecialCharTok{+}\NormalTok{ Lactic, }\AttributeTok{data =}\NormalTok{ cheddar)}
+\NormalTok{   y }\OtherTok{\textless{}{-}}\NormalTok{ cheddar}\SpecialCharTok{$}\NormalTok{taste}
+\NormalTok{   qrx }\OtherTok{\textless{}{-}} \FunctionTok{qr}\NormalTok{(x)}
+\NormalTok{   (f }\OtherTok{\textless{}{-}} \FunctionTok{t}\NormalTok{(}\FunctionTok{qr.Q}\NormalTok{(qrx)) }\SpecialCharTok{\%*\%}\NormalTok{ y)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##            [,1]
+## [1,] -134.37460
+## [2,]   48.10552
+## [3,]   46.33591
+## [4,]  -23.09366
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+   \FunctionTok{backsolve}\NormalTok{(}\FunctionTok{qr.R}\NormalTok{(qrx),f)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##             [,1]
+## [1,] -28.8767696
+## [2,]   0.3277413
+## [3,]   3.9118411
+## [4,]  19.6705434
+\end{verbatim}
+
+We can see that the second matrix contains the same coefficients as our
+original calculation of the coefficients as desired. \#\# Problem 2.7 An
+experiment was conducted to determine the effect of four factors on the
+resistivity of a semiconductor wafer. The data is found in \(wafer\)
+where each of the four factors is coded as − or + depending on whether
+the low or the high setting for that factor was used. Fit the linear
+model \(resist ∼ x_1 + x_2 + x_3 + x_4\). 1) Extract the \(X\) matrix
+using the \(model.matrix\) function. Examine this to determine how the
+low and high levels have been coded in the model. 2) Compute the
+correlation in the \(X\) matrix. Why are there some missing values in
+the matrix? 3) What difference in resistance is expected when moving
+from the low to the high level of \(x_1\)? 4) Refit the model without
+\(x_4\) and examine the regression coefficients and standard errors?
+What stayed the the same as the original fit and what changed? 5)
+Explain how the change in the regression coefficients is related to the
+correlation matrix of \(X\). \#\#\# Answer 2.7
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\tightlist
+\item
+  We can extract the \(X\) matrix using the following R code and
+  subsequently determine how the low and high levels have been coded in
+  the model
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \FunctionTok{library}\NormalTok{(faraway)}
+\NormalTok{  x }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{( }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x1 }\SpecialCharTok{+}\NormalTok{ x2 }\SpecialCharTok{+}\NormalTok{ x3 }\SpecialCharTok{+}\NormalTok{ x4, }\AttributeTok{data =}\NormalTok{ wafer)}
+  \FunctionTok{print}\NormalTok{(x)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    (Intercept) x1+ x2+ x3+ x4+
+## 1            1   0   0   0   0
+## 2            1   1   0   0   0
+## 3            1   0   1   0   0
+## 4            1   1   1   0   0
+## 5            1   0   0   1   0
+## 6            1   1   0   1   0
+## 7            1   0   1   1   0
+## 8            1   1   1   1   0
+## 9            1   0   0   0   1
+## 10           1   1   0   0   1
+## 11           1   0   1   0   1
+## 12           1   1   1   0   1
+## 13           1   0   0   1   1
+## 14           1   1   0   1   1
+## 15           1   0   1   1   1
+## 16           1   1   1   1   1
+## attr(,"assign")
+## [1] 0 1 2 3 4
+## attr(,"contrasts")
+## attr(,"contrasts")$x1
+## [1] "contr.treatment"
+## 
+## attr(,"contrasts")$x2
+## [1] "contr.treatment"
+## 
+## attr(,"contrasts")$x3
+## [1] "contr.treatment"
+## 
+## attr(,"contrasts")$x4
+## [1] "contr.treatment"
+\end{verbatim}
+
+We can see that high and low levels have been encoded as 0 and 1s in our
+data set. 2) We can calculate the correlation in the \(X\) matrix as
+follows,
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \FunctionTok{library}\NormalTok{(faraway)}
+\NormalTok{  x }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{( }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x1 }\SpecialCharTok{+}\NormalTok{ x2 }\SpecialCharTok{+}\NormalTok{ x3 }\SpecialCharTok{+}\NormalTok{ x4, }\AttributeTok{data =}\NormalTok{ wafer)}
+  \FunctionTok{cor}\NormalTok{(x)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in cor(x): the standard deviation is zero
+\end{verbatim}
+
+\begin{verbatim}
+##             (Intercept) x1+ x2+ x3+ x4+
+## (Intercept)           1  NA  NA  NA  NA
+## x1+                  NA   1   0   0   0
+## x2+                  NA   0   1   0   0
+## x3+                  NA   0   0   1   0
+## x4+                  NA   0   0   0   1
+\end{verbatim}
+
+We can note that there does not seem to be any correlation between each
+of our variables. There are missing values in the matrix because of the
+inclusion of the intercept, for which, we cannot calculate the
+correlation with any of our other variables. 3) Using the following
+statistical model, we see that,
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \FunctionTok{library}\NormalTok{(faraway)}
+\NormalTok{  reg }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(resist }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x1 }\SpecialCharTok{+}\NormalTok{ x2 }\SpecialCharTok{+}\NormalTok{ x3 }\SpecialCharTok{+}\NormalTok{ x4, }\AttributeTok{data =}\NormalTok{ wafer)}
+  \FunctionTok{summary}\NormalTok{(reg)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = resist ~ x1 + x2 + x3 + x4, data = wafer)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -43.381 -17.119   4.825  16.644  33.769 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   236.78      14.77  16.032 5.65e-09 ***
+## x1+            25.76      13.21   1.950 0.077085 .  
+## x2+           -69.89      13.21  -5.291 0.000256 ***
+## x3+            43.59      13.21   3.300 0.007083 ** 
+## x4+           -14.49      13.21  -1.097 0.296193    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 26.42 on 11 degrees of freedom
+## Multiple R-squared:  0.7996, Adjusted R-squared:  0.7267 
+## F-statistic: 10.97 on 4 and 11 DF,  p-value: 0.0007815
+\end{verbatim}
+
+We can see that there is an estimated increase of 25.76 in the
+resistance when moving from the low to the high level of \(x_1\). 4)
+Reftting our model to no longer include \(x_4\), we can see that we
+obtain,
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \FunctionTok{library}\NormalTok{(faraway)}
+\NormalTok{  reg }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(resist }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x1 }\SpecialCharTok{+}\NormalTok{ x2 }\SpecialCharTok{+}\NormalTok{ x3, }\AttributeTok{data =}\NormalTok{ wafer)}
+  \FunctionTok{summary}\NormalTok{(reg)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = resist ~ x1 + x2 + x3, data = wafer)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -36.137 -20.550   3.575  18.462  41.013 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   229.54      13.32  17.231 7.88e-10 ***
+## x1+            25.76      13.32   1.934 0.077047 .  
+## x2+           -69.89      13.32  -5.246 0.000206 ***
+## x3+            43.59      13.32   3.272 0.006677 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 26.64 on 12 degrees of freedom
+## Multiple R-squared:  0.7777, Adjusted R-squared:  0.7221 
+## F-statistic: 13.99 on 3 and 12 DF,  p-value: 0.0003187
+\end{verbatim}
+
+We can see that the estimates for each of our variables \(x1+\), \(x2+\)
+and \(x3+\) all remained the same, but that we had an increase in the
+intercept value, as well as the standard error of each of our
+explanatory variables. It is also noticeable that \(x2+\) and \(x3+\)
+also decrease their Pr(\textgreater\textbar t\textbar), though they
+remained in the same rejection regions. 5) Now, we can find the
+correlation of our matrix with \(x4\) removed as followed,
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \FunctionTok{library}\NormalTok{(faraway)}
+\NormalTok{  x }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{( }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x1 }\SpecialCharTok{+}\NormalTok{ x2 }\SpecialCharTok{+}\NormalTok{ x3, }\AttributeTok{data =}\NormalTok{ wafer)}
+  \FunctionTok{cor}\NormalTok{ (x)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in cor(x): the standard deviation is zero
+\end{verbatim}
+
+\begin{verbatim}
+##             (Intercept) x1+ x2+ x3+
+## (Intercept)           1  NA  NA  NA
+## x1+                  NA   1   0   0
+## x2+                  NA   0   1   0
+## x3+                  NA   0   0   1
+\end{verbatim}
+
+We can note that as our correlation matrix did not change, it makes
+sense that our regression coefficients did not change.
+
+\end{document}

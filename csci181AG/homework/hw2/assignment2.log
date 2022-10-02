@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2022.3.9)  9 SEP 2022 15:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2022.3.9)  13 SEP 2022 16:28
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -427,23 +427,34 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 22.
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
-{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] (/Users/jrjm/Desktop/fall 22/csci181AG/homework/hw2/assignment2.aux)
+{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
+<hw2p13.jpeg, id=32, 976.64874pt x 330.23375pt>
+File: hw2p13.jpeg Graphic file (type jpg)
+<use hw2p13.jpeg>
+Package pdftex.def Info: hw2p13.jpeg  used on input line 83.
+(pdftex.def)             Requested size: 195.32628pt x 66.04556pt.
+<hw2pr14.jpeg, id=33, 1237.62375pt x 1140.26pt>
+File: hw2pr14.jpeg Graphic file (type jpg)
+<use hw2pr14.jpeg>
+Package pdftex.def Info: hw2pr14.jpeg  used on input line 84.
+(pdftex.def)             Requested size: 247.52037pt x 228.04796pt.
+ [3 </Users/jrjm/Desktop/fall 22/csci181AG/homework/hw2/hw2p13.jpeg> </Users/jrjm/Desktop/fall 22/csci181AG/homework/hw2/hw2pr14.jpeg>] [4] (/Users/jrjm/Desktop/fall 22/csci181AG/homework/hw2/assignment2.aux)
 Package rerunfilecheck Info: File `assignment2.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 9894 strings out of 478994
- 144145 string characters out of 5858185
+ 9919 strings out of 478994
+ 144407 string characters out of 5858185
  457829 words of memory out of 5000000
- 27229 multiletter control sequences out of 15000+600000
+ 27239 multiletter control sequences out of 15000+600000
  411034 words of font info for 57 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 71i,6n,74p,571b,512s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on "/Users/jrjm/Desktop/fall 22/csci181AG/homework/hw2/assignment2.pdf" (3 pages, 90900 bytes).
+ 71i,6n,74p,2072b,569s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on "/Users/jrjm/Desktop/fall 22/csci181AG/homework/hw2/assignment2.pdf" (4 pages, 343951 bytes).
 PDF statistics:
- 70 PDF objects out of 1000 (max. 8388607)
- 57 compressed objects within 1 object stream
- 19 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 95 PDF objects out of 1000 (max. 8388607)
+ 78 compressed objects within 1 object stream
+ 31 named destinations out of 1000 (max. 500000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 

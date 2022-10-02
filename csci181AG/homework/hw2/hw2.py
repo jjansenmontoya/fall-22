@@ -36,6 +36,8 @@ class Bridge():
         # Keep track of which LANs are associated with which ports
         self.port_LAN_map = port_LAN_map
 
+        self.node_port_map = {}
+
     # Takes a LAN that a message was received from and returns the corresponding port
     # that message came in on
     def in_port_from_LAN(self, in_LAN):
@@ -52,19 +54,21 @@ class Bridge():
     def receive_message(self, in_LAN, m):
         # Determine which port this message arrived on
         in_port = self.in_port_from_LAN(in_LAN)
+        if m.src not in self.node_port_map: 
+            self.node_port_map[m.src] = in_port
+        if m.dst in self.node_port_map:
+            dst_port = self.node_port_map[m.dst]
+            if dst_port != in_port: 
+                self.port_LAN_map[dst_port].receive_broadcast(self, m)
+            # Update the dictionary of ports with where particular values are
+            # Go through all the ports and send message to all ports except the one that message came in on
+        else: 
+            for p in self.ports:
+                if p is not in_port:
+                    self.port_LAN_map[p].receive_broadcast(self, m)
 
-        print('m.src.name', m.src.name)
-        print('receiver', in_LAN.receivers)
-        print('self.port_LAN_map', self.port_LAN_map)
-
-        # Go through all the ports and send message to all ports except the one that message came in on
-        for p in self.ports:
-            if p is not in_port:
-                self.port_LAN_map[p].receive_broadcast(self, m)
 
 # The devices on LANs that send and receive messages
-
-
 class Node():
     def __init__(self, name, LAN):
         self.name = name
@@ -105,13 +109,24 @@ def main():
     F = Node("F", L5)
     G = Node("G", L5)
 
+    L6 = LAN("L6")
+
     # Initalize bridges with a mapping of port number: LAN
     B1 = Bridge("B1", {"P1": L1, "P2": L2, "P3": L4})
     B2 = Bridge("B2", {"P1": L1, "P2": L3, "P3": L5})
+    B3 = Bridge("B3", {"P1": L2, "P2": L3, "Pe": L6})
 
     # Add your messages below:
+    '''
     A.send_message(B)
-
+    B.send_message(A)
+    C.send_message(F)
+    print('d to f')
+    D.send_message(F)
+    print('b tp c')
+    B.send_message(C)
+    '''
+    C.send_message(D)
 
 if __name__ == '__main__':
     main()

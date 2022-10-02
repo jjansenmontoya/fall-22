@@ -1,0 +1,37 @@
+---
+title: "Lab2"
+author: "Joshua Jansen-Montoya"
+date: '2022-09-27'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Problem
+We can construct the following function to produce a simple linear regression with our desired pulled off values as follows. This function produces the linear model coefficients, fitted values, residuals, RSS, and a plot containing the scatter plot of values, regression line, and our fitted values.
+```{r function linear regression}
+  library(MASS)
+  data(phones)
+  linear.regression <- function(x,y) {
+    reg <- lm(y~x)
+    coeficients <- summary(reg)$coef[,1]
+    print('Coefficients')
+    print(coeficients)
+    fit1 <- fitted(reg)
+    print('fitted values')
+    print(head(fit1))
+    print('residuals')
+    residuals <- residuals(reg)
+    print(residuals)
+    print('RSS')
+    RSS <- deviance(reg)
+    print(RSS)
+    print("Here are the plots")
+    plot(x,y, pch = 17, col = 'blue')
+    abline(reg)
+    points(fit1, col = 'red')
+  }
+  x <- linear.regression(phones$calls, phones$year)
+```

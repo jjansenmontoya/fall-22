@@ -1,0 +1,132 @@
+---
+title: "HW2"
+author: "Joshua Jansen-Montoya"
+date: '2022-09-13'
+output:
+  html_document:
+    df_print: paged
+---
+
+### Problem 2.2
+The dataset $uswages$ is drawn as a sample from the Current Population Survey in 1988. Fit a model with weekly wages as the response and years of education and experience as predictors. Report and give a simple interpretation to the regression coefficient for years of education. Now fit the same model but with logged weekly wages. Give an interpretation to the regression coefficient for years of education. Which interpretation is more natural?
+
+### Answwer 2.2
+First, we will fit the model with the weekly wages as the response and the years of education and experience as the predictors with the following R code.
+```{r education experience}
+  library(faraway)
+  summary(uswages)
+  reg <- lm(wage ~ educ + exper, data = uswages)
+  summary(reg)
+  reg2<- lm(log(wage) ~ educ + exper, data = uswages)
+  summary(reg2)
+```
+Looking at the regression coefficient for education, we can see that for every year of education that a US male worker has, they can expect to make 51.18 dollars more per week. Now, looking at our logged version of the weekly wage, we can see that we for every year of education more that a US male worker has, they can expect to make  51.18
+logged dollars per week. The more natural interpretation is the first, non-logged weekly wages.
+
+
+### Problem 2.3
+In this question, we investigate the relative merits of methods for computing the coefficients. Generate some artificial data by:
+```{rcode example}
+> x <- 1:20
+> y <- x + rnorm(20)
+```
+
+Fit a polynomial in $x$ for predicting $y$. Compute $\hat{\beta}$ in two ways, by $lm()$ and by using the direct calculation described in the chapter. At what degree of polynomial does the direct calculation method fail? (Note the need for the $I()$ function in fitting the polynomial, that is, $lm(y ~ x + I(x^2))$.
+
+### Answer 2.3
+First, we will compute $\hat{\beta}$ by means of $lm()$. In doing so, we can use the following R code snippet to find the relevant calculation.
+```{r beta via lm()}
+  x <- 1:20
+  y <- x + rnorm(20)
+  lm(y ~ x)
+  # direct calculation
+  solve(crossprod(x,x),crossprod(x,y))
+```
+Looking at our function, we can see that it appears that our value for $\hat{\beta}$ is 0.94. Now, 
+we will use the method of directly calculating $\hat{\beta}$ to get the value of 0.96. Now, after iterations, we found that the method breaks for $x^6$ polynomials, or polynomials of the degree 6.
+
+### Problem 2.6
+Thirty samples of cheddar cheese were analyzed for their content of acetic acid, hydrogen sulfide and lactic acid. Each sample was tasted and scored by a panel of judges and the average taste score produced. Use the $cheddar$ data to answer the following:
+  1) Fit a regression model with taste as the response and the three chemical contents as predictors. Report the values of the regression coefficients.
+  2) Compute the correlation between the fitted values and the response. Square it. Identify where this value appears in the regression output.
+  3) Fit the same regression model but without an intercept term. What is the value of $R^2$ reported in the output? Compute a more reasonable measure of the goodness of fit for this example.
+  4) Compute the regression coefficients from the original fit using the QR decomposition showing your R code.
+
+### Answer 2.6
+  1) We can construct the regression model as follows using the R code,
+    ```{r cheddar}
+    library(faraway)
+    reg <- lm(taste ~ Acetic + H2S + Lactic, data = cheddar)
+    summary(reg)
+    cor(cbind(cheddar$taste, cheddar$Acetic+  cheddar$H2S+  cheddar$Lactic))
+    reg2 <- lm(taste ~ Acetic + H2S + Lactic -1, data = cheddar)
+    summary(reg2)
+    ```
+  We can see then that our regression coefficients are 0.3277 for Acetic acid, 3.91 for H2S and 19.67 for Lactic acid with the Acetic and Lactic acid being signficant for an $\alpha = 0.05$ and H2S being significant for an $\alpha = 0$.
+  2) Using our R code, we can see that our correlation matrix gives us correlation between our taste and our fitted values of $0.7804$. Squaring this value, we can see that we get 0.609, which we can see is our $R^2$ statistic.
+  3) Removing the intercept, we can see that we get an $R^2$ value of 0.8877. Now, a better statistic would be to calculate $\sigma$ for the model, which we can do as follows,
+```{r Fstate}
+    library(faraway)
+    reg2 <- lm(taste ~ Acetic + H2S + Lactic -1, data = cheddar)
+    sigma(reg2)
+```
+  which is a more reasonable measure of the goodness of fit for the model.
+  4) Now, using R code to calculate the QR decomposition, we obtain
+```{r QR decomposition}
+  library(faraway)
+   x <- model.matrix( ~ Acetic + H2S + Lactic, data = cheddar)
+   y <- cheddar$taste
+   qrx <- qr(x)
+   (f <- t(qr.Q(qrx)) %*% y)
+   backsolve(qr.R(qrx),f)
+```
+  We can see that the second matrix contains the same coefficients as our original calculation of the coefficients as desired.
+## Problem 2.7
+An experiment was conducted to determine the effect of four factors on the resistivity of a semiconductor wafer. The data is found in $wafer$ where each of the four factors is coded as − or + depending on whether the low or the high setting for that factor was used. Fit the linear model $resist ∼ x_1 + x_2 + x_3 + x_4$.
+  1) Extract the $X$ matrix using the $model.matrix$ function. Examine this to determine how the low and high levels have been coded in the model.
+  2) Compute the correlation in the $X$ matrix. Why are there some missing values in the matrix?
+  3) What difference in resistance is expected when moving from the low to the high level of $x_1$?
+  4) Refit the model without $x_4$ and examine the regression coefficients and standard errors? What stayed the the same as the original fit and what changed?
+  5) Explain how the change in the regression coefficients is related to the correlation matrix of $X$.
+### Answer 2.7
+
+  1) We can extract the $X$ matrix using the following R code and subsequently determine how the low and high levels have been coded in the model
+```{r 2.7 model.matrix}
+  library(faraway)
+  x <- model.matrix( ~ x1 + x2 + x3 + x4, data = wafer)
+  print(x)
+```
+  We can see that high and low levels have been encoded as 0 and 1s in our data set.
+  2) We can calculate the correlation in the $X$ matrix as follows,
+```{r correlation matrix}
+  library(faraway)
+  x <- model.matrix( ~ x1 + x2 + x3 + x4, data = wafer)
+  cor(x)
+```
+  We can note that there does not seem to be any correlation between each of our variables. There are missing values in the matrix because of the inclusion of the intercept, for which, we cannot calculate the correlation with any of our other variables.
+  3) Using the following statistical model, we see that,
+```{r mode}
+  library(faraway)
+  reg <- lm(resist ~ x1 + x2 + x3 + x4, data = wafer)
+  summary(reg)
+```
+  We can see that there is an estimated increase of 25.76 in the resistance when moving from the low to the high level of $x_1$.
+  4) Reftting our model to no longer include $x_4$, we can see that we obtain,
+```{r minus x4}
+  library(faraway)
+  reg <- lm(resist ~ x1 + x2 + x3, data = wafer)
+  summary(reg)
+```
+  We can see that the estimates for each of our variables $x1+$, $x2+$ and $x3+$ all remained the same,
+  but that we had an increase in the intercept value, as well as the standard error of each of our explanatory variables. It is also noticeable that $x2+$ and $x3+$ also decrease their Pr(>|t|), though they remained in the same rejection regions.
+  5) Now, we can find the correlation of our matrix with $x4$ removed as followed,
+```{r minus x4 v. 2}
+  library(faraway)
+  x <- model.matrix( ~ x1 + x2 + x3, data = wafer)
+  cor (x)
+```
+  We can note that as our correlation matrix did not change, it makes sense that our regression coefficients did not change.
+  
+```{r, include=FALSE}
+options(tinytex.verbose = TRUE)
+```

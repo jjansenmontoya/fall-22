@@ -208,7 +208,7 @@ int main(int argc, char **argv)
         // Heapify a copy of the numbers using the top-down method
         // std::cerr << "copy 1...\n";
         auto a1 = a0;
-        std::cerr << "top_down heapify...\n";
+        std::cerr << "top_down heapify...";
         heapify_topdown(a1);
         // dumpVec(a1)
         //std::cerr << "checking heap order...\n";
@@ -218,7 +218,7 @@ int main(int argc, char **argv)
         // Heapify a copy of the numbers using the bottom-up method
         // std::cerr << "copy 2...\n";
         auto a2 = a0; // Use the same random array
-        std::cerr << "bottom_up heapify..." << "\n";
+        std::cerr << "bottom_up heapify...";
         heapify_bottomup(a2);
         // dumpVec(a2);
         // std::cerr << "checking heap order...\n";

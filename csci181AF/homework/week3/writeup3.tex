@@ -1,0 +1,117 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb, graphicx, multicol, array}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\begin{document}
+CSCI181AF: Advanced Data Structures\\
+09/21/2022
+\begin{center}
+    \bf{Writeup HW \#3}
+\end{center}
+\subsection*{Introduction}
+We will be evaluating the performance of four different algorithms written in C++ to return an array of the $k$ largest elements of a given C++ vector of length $n$ by comparing the running times (ms) of each. The first algorithm sorts the array then returns the first $k$ values.
+The second algorithm partially sorts the vector to find the $(n-k)^{th}$ largest number, then outputs the top $k$ numbers. The third algorithm converts the vector to a maxheap, then pops off the top $k$ values to a new vector to return. The fourth algorithm
+uses a minheap of size $k$. If a value is larger than the top of the minheap, then it is added, then the minheap is returned as a vector. These different algorithms were tested using values of $n = 10000000$, $k = 32, 5000000$, with each
+experiment being completed 30 times (each algorithm runs 30 times) across two different situations, one where the values were strictly increasing and another where the order has been shuffled.
+\vspace{-4mm}
+\subsection*{Data}
+\vspace{-2mm}
+\begin{table}[ht]
+    \parbox{.45\linewidth}{
+    \centering
+    \begin{tabular}{|c c c c|} 
+        \hline
+        Strategy & Avg. & STDev. & 95$\%$ CI \\ [0.5ex] 
+        \hline
+        1 & 759 & 27 & $\pm 10$ \\ 
+        \hline
+        2& 76.5 & 20 & $\pm 7$ \\
+        \hline
+        3 & 152 & 11 & $\pm 4$ \\
+        \hline
+        4 & 16.6 & 0.8 & $\pm 0.3$\\
+        \hline
+       \end{tabular}
+    \caption{$n = 1e7, k = 32$, Shuffled}
+    \centering
+    \begin{tabular}{|c c c c|} 
+        \hline
+        Strategy & Avg. & STDev. & 95$\%$ CI \\ [0.5ex]
+        \hline
+        1 & 747& 28 & $\pm 10$ \\ 
+        \hline
+        2 & 105 & 14 & $\pm 5$ \\
+        \hline
+        3 & 3800 & 190 & $\pm 70$ \\
+        \hline
+        4 & 4540 & 400 & $\pm 140$\\
+        \hline
+       \end{tabular}
+    \caption{$n = 1e7, k = 5e6$, Shuffled}
+    \centering
+    }
+    \parbox{.45\linewidth}{
+    \centering
+    \begin{tabular}{|c c c c|} 
+        \hline
+        Strategy & Avg. & STDev. & 95$\%$ CI \\ [0.5ex]
+        \hline
+        1 &50 & 13 & $\pm 5$ \\ 
+        \hline
+        2 & 31 & 4 & $\pm 1$ \\
+        \hline
+        3 & 330 & 18 & $\pm 6$ \\
+        \hline
+        4 & 140 & 9 & $\pm 3$\\
+        \hline
+       \end{tabular}
+    \caption{$n = 1e7, k = 32$, Unshuffled}
+    \centering
+    \begin{tabular}{|c c c c|} 
+        \hline
+        Strategy & Avg. & STDev. & 95$\%$ CI \\ [0.5ex]
+        \hline
+        1 &62.3 & 13 & $\pm 4$ \\ 
+        \hline
+        2 & 35.2 & 5 & $\pm 2$ \\
+        \hline
+        3 & 704 & 45 & $\pm 16$ \\
+        \hline
+        4 & 1033 & 87 & $\pm 30$\\
+        \hline
+       \end{tabular}
+    \caption{$n = 1e7, k = 5e6$, Unshuffled}}
+    \centering
+    \begin{tabular}{|c c c c|} 
+        \hline
+        Strategy & Avg. & STDev. & 95$\%$ CI \\ [0.5ex]
+        \hline
+        1 &394 & 340 & $\pm 120$ \\ 
+        \hline
+        2 & 61.6 & 33 & $\pm 12$ \\
+        \hline
+        3 & 1247 & 1496 & $\pm 540$ \\
+        \hline
+        4 & 1431 & 1852 & $\pm 660$\\
+        \hline
+       \end{tabular}
+       \vspace{-2mm}
+    \caption{Averaged Values over All 4 Experiments}
+\end{table}
+\vspace{-8mm}
+
+\subsection*{Analysis}
+Looking at Table 5, we can see that overall, our strategy of partially sorting the vector had on average, the best time with a confidence interval that did not overlap with any other confidence intervals. However, on a case by case basis,
+we can see that Table 1 indicates that for a small $k$, shuffled array, the min heap works best. However, in unshuffled vectors, as seen in Tables 3 and 4, the partial sort strategy works best. Thus, in a general case, we can conclude that the 
+best algorithm for the $k$ of $n$ problem is to partially sort the vector to find the $(n-k)^{th}$ largest number and output the top $k$ numbers, as it also has the least variance across each experiment.
+\end{document}
