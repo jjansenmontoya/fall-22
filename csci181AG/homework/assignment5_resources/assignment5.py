@@ -37,18 +37,20 @@ class Node():
 
 	# Implement this function
 	def lookup(self, IP_string, best_match):
-		if self.interface_name != None:
+		if self.interface_name is not None:
 			best_match = self.interface_name
+		if IP_string == "":
+			return best_match
 		if IP_string[0] == "0":
-			if self.left == None:
+			if self.left is None:
 				return best_match
 			else:
-				self.left.lookup(IP_string[1:], best_match)
+				return self.left.lookup(IP_string[1:], best_match)
 		else:
-			if self.right == None:
+			if self.right is None:
 				return best_match
 			else:
-				self.right.lookup(IP_string[1:], best_match)
+				return self.right.lookup(IP_string[1:], best_match)
 
 
 
