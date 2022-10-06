@@ -47,6 +47,13 @@ The only part of the code you need to touch is the lookup function in the Node c
 
 \end{enumerate}
 \end{problem}
+
+\subsection*{Answer 1:}
+\begin{enumerate}
+    \item[(b)] The interfaces that each IP string is sent to using the code are 1: P10, 2: P16, 3: P17, 4: P3, 5: P13.
+    \item[(c)] The worst case number of lookups using this trie is 29 since our longest interface is 28 and worst case behavior would be that we would get to this point, then recurse to either its left or right child, and then return then, giving us 29 lookups. One thing we can do to lower the worst-case lookup time is use variable stride lengths for our multibit tries, as this would reduce our lookup time by some multiplicative factor.
+\end{enumerate}
+
 \begin{problem} {2: Lulea Compression}
 
 For each of the three nodes shown below, please write the bit array and the value array using the Lulea compression scheme we covered in class.
@@ -58,12 +65,6 @@ For each of the three nodes shown below, please write the bit array and the valu
 \end{figure}
 
 \end{problem}
-
-\subsection*{Answer 1:}
-\begin{enumerate}
-    \item[(b)] The interfaces that each IP string is sent to using the code are 1: P10, 2: P16, 3: P17, 4: P3, 5: P13.
-    \item[(c)] The worst case number of lookups using this trie is 29 since our longest interface is 28 and worst case behavior would be that we would get to this point, then recurse to either its left or right child, and then return then, giving us 29 lookups. One thing we can do to lower the worst-case lookup time is use variable stride lengths for our multibit tries, as this would reduce our lookup time by some multiplicative factor.
-\end{enumerate}
 
 \subsection*{Answer 2:}
 This answer will be of the form of an enumeration going from left $\to$ right and from up $\to$ down.
