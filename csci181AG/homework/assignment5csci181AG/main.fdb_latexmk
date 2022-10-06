@@ -1,7 +1,7 @@
 # Fdb version 3
-["pdflatex"] 1665008067 "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment5csci181AG/main.tex" "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment5csci181AG/main.pdf" "main" 1665008069
-  "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment5csci181AG/main.aux" 1665008068 724 2249fba860e345e3cbaffce8c8641878 ""
-  "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment5csci181AG/main.tex" 1665008067 6526 72fe3c2bdc4cf037ac8e5a845bad85e9 ""
+["pdflatex"] 1665031761 "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment5csci181AG/main.tex" "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment5csci181AG/main.pdf" "main" 1665031765
+  "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment5csci181AG/main.aux" 1665031762 724 2249fba860e345e3cbaffce8c8641878 ""
+  "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment5csci181AG/main.tex" 1665031763 7145 25f931e037e748eaeeb86485c5d40e78 ""
   "/usr/local/texlive/2021/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -92,13 +92,13 @@
   "/usr/local/texlive/2021/texmf-var/web2c/pdftex/pdflatex.fmt" 1646876308 2724737 ddac71e5e91da4b699a14b2c227608a9 ""
   "/usr/local/texlive/2021/texmf.cnf" 1616695596 577 4c1911a7228e554c6032256d3cf5567d ""
   "figures/trie_nodes.pdf" 1664444978 36215 ca71b6f82bd56b2a1b71e555a5845cd9 ""
-  "main.aux" 1665008068 724 2249fba860e345e3cbaffce8c8641878 "pdflatex"
-  "main.out" 1665008068 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "main.tex" 1665008067 6526 72fe3c2bdc4cf037ac8e5a845bad85e9 ""
+  "main.aux" 1665031762 724 2249fba860e345e3cbaffce8c8641878 "pdflatex"
+  "main.out" 1665031762 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "main.tex" 1665031763 7145 25f931e037e748eaeeb86485c5d40e78 ""
   (generated)
-  "main.pdf"
-  "main.out"
   "main.log"
+  "main.pdf"
   "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment5csci181AG/main.pdf"
   "main.aux"
   "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment5csci181AG/main.log"
+  "main.out"
