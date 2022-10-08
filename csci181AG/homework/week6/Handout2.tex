@@ -1,0 +1,99 @@
+\documentclass[12pt]{article}
+\usepackage{geometry}
+\usepackage{enumerate}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{etoolbox}
+\usepackage{graphicx}
+
+\begin{document}
+
+\begin{center}
+    \textbf{
+\large{Logic and Computability} \\
+\large{Handout 2:  Using the Pairwise Distinguishability Theorem and Proving Power of Computation Models}
+}\\
+
+Ran Libeskind-Hadas (edited by Prof.\ George)\\
+\end{center}
+
+This document demonstrates how to write a proofs using the Pairwise Distinguishability Theorem and how to prove whether one model of computation is more powerful than another.  Comments that begin  \emph{Editor's Note} are just my comments to you as you read through this document.  You would not include notes like this in your own proofs.
+
+\section{Pairwise Distinguishability}
+
+First, the Pairwise Distinguishability Theorem has two very closely-related versions.  They are so closely-related that we usually just cite the ``Pairwise Distinguishability Theorem'' without indicating the version.  The first version says that if $L$ is a language and $S$ is a pairwise distinguishable set for $L$ then any DFA for $L$ must have at least $|S|$ states.  Note that this theorem doesn't even state that $L$ is necessarily regular!  It just says that if it is regular, then any DFA for that language must have at least $|S|$ states.  The second version says that if $L$ is a language and $S$ is an infinite pairwise distinguishable set for $L$, then $L$ cannot be regular.  That is, there can be no DFA that accepts $L$.
+
+We'll first prove that the language $L$ of all binary strings in which the number of $1$'s is a multiple of three requires at least three states.  
+
+\paragraph{Proof:}  Let $S =\{\epsilon, 1, 11 \}$.  We claim that this set is pairwise distinguishable.   \emph{Editor's Note:  This set $S$ does not need to comprise strings in $L$!}  First, consider the pair $\epsilon, 1$.  These two strings are distinguished by $z = \epsilon$:  $\epsilon z = \epsilon \in L$ but $1 z = 1 \notin L$.  Next, consider the pair $\epsilon, 11$.  This pair is also distinguished by the string $z= \epsilon$ since $\epsilon z \in L$ but $11 z \notin L$.  Finally, the pair of strings $1, 11$ are distinguished by the string $z = 1$ since $1z = 11 \notin L$ but $11z = 111 \in L$.  Since every pair of strings in $S$ are distinguishable and $|S| = 3$, the Pairwise Distinguishability Theorem asserts that any DFA for $L$ must have at least 3 states.
+
+Next, we'll prove that the language $L = \{ 0^i 1^i | i \geq 0 \}$ is not regular.
+
+\paragraph{Proof:}  Consider the infinite set of strings $S = \{ 0^i | \  i \geq 0 \}$.  \emph{Editor's Note:  This set $S$ does not need to comprise strings in $L$.  It need only be an infinite set of strings over the alphabet of $L$.}  We show that $S$ is pairwise distinguishable by showing that every pair of strings in $S$ are distinguishable. 
+To that end, consider an arbitrary pair of two distinct strings $x, y\in S$.
+Then, there exists $k, \ell$ such that $k \neq \ell$, $x = 0^k$, and $y = 0^{\ell}$.  Let $z = 1^k$.  (\emph{Editor's Note:  $1^{\ell}$ would work equally well here.})
+Then $xz = 0^k1^k \in L$ and $yz = 0^{\ell}1^k \notin L$.  Thus, $S$ is pairwise distinguishable and has infinite cardinality, and thus no DFA can exist for $L$.
+
+\vspace{0.5cm}
+
+Here's another one. We'll prove that the language $L = \{0^{2^i} | i \geq 0 \}$ is not regular.
+In this case, you'll see that the set $S$ that we choose is the same as $L$.  That's not necessary and perhaps even unusual, but there's nothing in the statement of the theorem that prohibits this!
+
+\paragraph{Proof:}  Consider the infinite set of strings $S = \{ 0^{2^i} | \  i \geq 0 \}$.   We show that $S$ is pairwise distinguishable by showing that every pair of strings in $S$ are distinguishable. 
+To that end, consider an arbitrary pair of two distinct strings $x, y\in S$.
+Then, there exists $k, \ell$ such that $k \neq \ell$, $x = 0^{2^k}$, and $y = 0^{2^{\ell}}$.  Without loss of generality, assume that $k < \ell$.  Let $z =0^{2^k}$.  
+Then $xz = 0^{2^k}  0^{2^{k}} = 0^{2^{k+1}} \in L$ and $yz = 0^{2^{\ell}} 0^{2^{k}}$.  Note that $2^{\ell} + 2^k$ is not a power of two because it is strictly between two consecutive powers of two.  That is,  because $0 < k < \ell$, $2^{\ell}  < 2^{\ell} + 2^k  < 2^{\ell + 1}$.  
+Thus,  $yz = 0^{2^{\ell}} 0^{2^{k}} \notin L$.  Therefore, $S$ is pairwise distinguishable and has infinite cardinality, and thus no DFA can exist for $L$.
+
+\section{Proofs about the Power of Models of Computation}
+
+In class, we showed that DFAs and NFAs are equally powerful models of computation.  In general, two models of computation, $A$ and $B$, are said to be \emph{equally powerful} if every language accepted by a machine in model $A$ is accepted by a machine in model $B$ and vice versa.  Model $A$ is said to be \emph{more powerful} than model $B$ if every language accepted by a machine in model $B$ is accepted by a machine in model $A$ \emph{and} there exists at least one language that is accepted by a machine in model $A$ that is not accepted by a machine in model $B$.
+
+\subsection{Proving that Two Models are Equally Powerful}
+
+To prove that two models of computation, $A$ and $B$, are equally powerful, we show that any language accepted by $A$ can be accepted by $B$ and vice versa.  In other words, we show
+that model $A$ can \emph{simulate} model $B$ and model $B$ can simulate model $A$.  That requires two separate proofs.  Here's an example from class, written out the way you should write such arguments in the homework.  Here we prove that NFAs and DFAs are equally powerful.
+
+\emph{Editor's note:  You don't need to remind the reader about the models of computation.  The model will either be given explicitly in the homework assignment or in the lecture notes and you can just refer to those with restating them.  I've including them below just for your reference.}
+Recall that a DFA is a 5-tuple $D = (Q, \Sigma, \delta, q_0, F)$ which comprises a finite set of states $Q$, finite alphabet $\Sigma$, transition function $\delta: Q \times \Sigma \rightarrow Q$, start state $q_0 \in Q$, and accepting (or ``final'') states $F \subseteq Q$.  The language of $D$, denoted $L(D)$ is the collection of strings $w \in \Sigma^{*}$ such that $D$ goes from the start state $q_0$ to an accepting state $q_f \in F$ on input $w$.
+
+Recall that an NFA\footnote{From now on, we assume that NFA's allow $\epsilon$-transitions.  That is, ``NFA'' refers to an $\epsilon$-NFA.} is a 5-tuple $N =  (Q, \Sigma, \delta, q_0, F)$ which comprises a finite set of states $Q$, finite alphabet $\Sigma$, 
+transition function $\delta: Q \times \Sigma \cup \{ \epsilon \} \rightarrow {\cal P}(Q)$, start state $q_0 \in Q$, and accepting (or ``final'' states) $F \subseteq Q$.  
+The language of $N$, denoted $L(N)$ is the collection of strings $w \in \Sigma^{*}$ such that there exists some choice of transitions for which $N$ goes from the start state $q_0$ to an accepting state $q_f \in F$ on input $w$.
+	
+\emph{Editor's note:  This is where your proof would begin.  It goes like this:}
+We show that DFAs and NFAs are equally powerful.  To show that, we first show that any language accepted by a DFA is also accepted by an NFA and then we show that every language accepted by an NFA is accepted by a DFA.  First, consider a language $L$ accepted by a DFA $D = (Q, \Sigma, \delta, q_0, F)$.  That language is accepted by a NFA $N = (Q, \Sigma, \delta', q_0, F)$ where $\delta'(q, \sigma) = \{ \delta(q, \sigma) \}$.  That is, the set of choices that $N$ can make in a given transition $\delta'(q, \sigma)$ is a singleton set comprising the state $\delta(q, \sigma)$ specified by $D$.  Under this construction, $N$  accepts exactly the inputs accepted by $D$.  
+
+Conversely, let $L$ be a language accepted by NFA $N = (Q, \Sigma, \delta, q_0, F)$.  Then, we construct a DFA $D = (Q', \Sigma, \delta', q'_0, F')$ as follows:  
+First, for a given set of states $S \subseteq Q$, define the \emph{epsilon closure} $E(S)$ to be the set of all states in $Q$ that are reachable on a path of $0$ or more $\epsilon$-transitions from the states in $S$ .
+\begin{itemize}
+	\item $Q' = {\cal P}(Q)$.
+	\item For each $\sigma \in \Sigma$ and $R \in Q'$, note that $R$ is, by definition, a subset of states of $Q$.  Then, let $\delta'(R, \sigma) = \bigcup_{r \in R}  E(\delta(r, \sigma))$.
+	\item $q'_0 = E(\{q_0\})$.
+	\item $F' = \{R | (R \in Q') \wedge (R \cap F \neq \emptyset) \}$.
+\end{itemize}
+\emph{Editor's Note:  Notice that in each direction, we described the 5-tuple construction of one model from the other.  This is required in every such proof.}
+
+Next, we claim that DFA $D$ accepts exactly those strings accepted by NFA $N$.  (\emph{Editor's Note:  This claim can be proved very rigorously -- by induction on the length of the string --  or more informally.  In this course, we will use informal proofs like the one that follows.)} Consider a string $w$ accepted by the NFA $N$.  
+	Then, by definition, there exists a sequence of choices of transitions that takes $N$ from the start state to an accepting state on the given input string $w$.    
+	Let $w = \sigma_1 \dots \sigma_n$.  
+	Now, consider the set of states that the NFA visits on a path that leads it to accept that input string.
+	Our DFA begins in a start state that corresponds to the set of all states that the NFA could have been in before consuming the first symbol.  Then, on reading $\sigma_1$, our DFA $D$ goes to a state that corresponds to the set of all states that the NFA $N$ could be in after reading $\sigma_1$ and taking any number of $\epsilon$-moves.  In general, our DFA maintains the invariant that after having consumed input $\sigma_1 \dots \sigma_i$, it is in a state that corresponds to all the states that the NFA could possibly be in after consuming that same input.  
+	\emph{Editor's Note:  It's this claim about the invariant that could be proved more formally by induction, but we won't do that because it makes the proofs quite tedious to write!}  Thus, 
+	when the DFA consumes all of the input string, it is in a state that corresponds to the set of all states that the NFA could be in after reading the input string.  If the NFA could have been in a final state on that input, the state of the DFA will include that state and, by definition of $F'$ (the set of final states of $D$), $D$ accepts the string.  Conversely, if the NFA rejects the input string then it cannot be in any accepting state and thus the state of the DFA does not contain an accepting state of the NFA and thus, by definition of $F'$, the DFA rejects the input.  
+	\emph{Editor's Note:  It's important to argue that if the NFA accepts then the DFA accepts AND if the NFA rejects then the DFA rejects.}
+
+\subsection{Proving that One Model is More Powerful than Another}
+
+We'll prove that Counter DFAs are more powerful than DFAs.  Recall from class that a Counter DFA is a DFA with a counter.   That counter starts at 0 and every transition can increment, decrement, or keep the counter at the same value.  A Counter DFA starts with its counter equal to 0 and accepts its input if and only if it ends in an accepting state with the counter equal to zero when the input is completely consumed.  More formally, a Counter DFA is a machine $M = (Q, \Sigma, \delta, q_0, F)$ that is identical to a DFA but starts with a counter with value 0 and whose transition function is of the form 
+	$\delta: Q \times \Sigma \rightarrow Q \times \{ -1, 0, 1 \}$ 
+	where the $-1, 0, 1$ indicate decrement, don't change, and increment the counter, respectively.  
+
+
+First, we show that any language accepted by a DFA is accepted a Counter DFA.  Given a DFA $D = (Q, \Sigma, \delta, q_0, F)$, we can construct a Counter DFA
+$C = (Q, \Sigma, \delta', q_0, F)$ that is identical to the DFA except that $\delta'(q, \sigma) = (\delta(q, \sigma), 0)$ indicating that the counter doesn't change on each move.
+ Thus, this constructed Counter DFA behaves just like the DFA but does not increment its counter.  Thus, the Counter DFA accepts its input if and only if the DFA accepts its input.  However, the language $L = \{0^i 1^i | i \geq 0 \}$ is known to be non-regular (we proved that in class) but is accepted by a Counter DFA that begins in state $q_0$ and for every 0 that it sees it increments its counter and returns to state $q_0$.  When a $1$ is seen from $q_0$, the machine decrements its counter and enters a new state $q_1$.  From state $q_1$ on input 1, we decrement the counter and return to state $q_1$.  From state $q_1$ on input 0, we go to a special reject state that consumes the remainder of the input.  Both $q_0$ and $q_1$ are accept states.  We note that this machine accepts exactly those strings in $L$ and thus accepts a non-regular language.  Thus, we have shown that Counter DFAs are more powerful than DFAs.
+
+
+
+\end{document}
