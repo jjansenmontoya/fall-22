@@ -1,7 +1,7 @@
 # Fdb version 3
-["pdflatex"] 1665279490 "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.tex" "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.pdf" "hw6" 1665279492
-  "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.aux" 1665279491 32 2d1df76398b3c48c6419a45a7331db2d ""
-  "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.tex" 1665279490 11178 30ca74d54a77410d1dcb4078e44caa41 ""
+["pdflatex"] 1665335565 "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.tex" "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.pdf" "hw6" 1665335567
+  "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.aux" 1665335566 32 2d1df76398b3c48c6419a45a7331db2d ""
+  "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.tex" 1665335565 11178 6d44a4a8cb046e47a27cf857276a0475 ""
   "/usr/local/texlive/2021/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -142,11 +142,11 @@
   "/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1616695603 5169178 a2ce6e2d73f603b690db6777d06dbccb ""
   "/usr/local/texlive/2021/texmf-var/web2c/pdftex/pdflatex.fmt" 1646876308 2724737 ddac71e5e91da4b699a14b2c227608a9 ""
   "/usr/local/texlive/2021/texmf.cnf" 1616695596 577 4c1911a7228e554c6032256d3cf5567d ""
-  "hw6.aux" 1665279491 32 2d1df76398b3c48c6419a45a7331db2d "pdflatex"
-  "hw6.tex" 1665279490 11178 30ca74d54a77410d1dcb4078e44caa41 ""
+  "hw6.aux" 1665335566 32 2d1df76398b3c48c6419a45a7331db2d "pdflatex"
+  "hw6.tex" 1665335565 11178 6d44a4a8cb046e47a27cf857276a0475 ""
   (generated)
-  "hw6.pdf"
-  "hw6.aux"
-  "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.log"
   "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.pdf"
+  "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.log"
+  "hw6.aux"
+  "hw6.pdf"
   "hw6.log"

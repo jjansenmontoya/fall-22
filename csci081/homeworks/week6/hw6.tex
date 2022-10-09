@@ -75,7 +75,7 @@ Consider the language of binary strings in which the number of occurrences of \v
 Is this language regular?  If so, submit a Prolog file that represents the DFA (using the DFA representation that we used in HW \#5) called \verb+problem3.pl+.  If it's not a regular language, submit a proof using the Pairwise Distinguishability Theorem in a file called \verb+problem3.pdf+ using the same problem upload (we will grade your proof manually).
  
 \subsection*{Answer 3:}
-Consider the proof tha tthe language is not regular by way of the Pairwise Distinguishability Theorem. Let $S$ be the infinite set, $\{(01)^i| i \geq 0\}$. We show that $S$ is pairwise distinguishable by showing that
+Consider the proof that the language is not regular by way of the Pairwise Distinguishability Theorem. Let $S$ be the infinite set, $\{(01)^i| i \geq 0\}$. We show that $S$ is pairwise distinguishable by showing that
 every pair of strings in $S$ are distinguishable. To that end, consider an arbitrary pair
 of two distinct strings $x, y \in S$. Then, there exists $k,l$ such that $k \neq l$ such that $x = (01)^k$ and $y = (01)^l$. Thus, let $z = (10)^k$. Therefore, we can see that $xz = (01)^k(10)^k \in L$, but that $yz = (01)^l(10)^k \not \in L$ since $k \neq l$. Therefore, $S$ is pairwise distinguishable and has infinite cardinality, and thus no DFA
 can exist for $L$. 
