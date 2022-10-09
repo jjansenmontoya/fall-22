@@ -1,0 +1,111 @@
+\documentclass[12pt]{article}
+\usepackage{geometry}
+\usepackage{enumerate}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{etoolbox}
+\usepackage{graphicx}
+\usepackage{framed}
+\usepackage{tikzsymbols}
+
+\newcommand{\WT}[1]{\begin{framed} \noindent \textbf{What's the Rationale?} #1 \end{framed}}
+
+% Turn solutions and grading guidelines on or off. 
+\newbool{solutions}
+\newbool{grading}
+\booltrue{solutions}
+%\boolfalse{solutions}
+\booltrue{grading}
+%\boolfalse{grading}
+
+\newcommand{\DoNotShare}{\large \noindent \textbf{Under the Harvey Mudd Honor Code, this document is not to be shared.} \normalsize}
+\newcommand{\Problem}[3]{\mbox{} \newline \noindent \textbf{\textbf{Challenge #1: #2 [#3 Points] \\ }}}
+\newrobustcmd{\Solution}[1]{\ifbool{solutions}{\mbox{} \newline \noindent \textbf{Solution:} #1}{}}
+\newrobustcmd{\Grading}[1]{\ifbool{grading}{\mbox{} \newline \noindent \textbf{Grading Guidelines:} #1}{}}
+
+\begin{document}
+
+\begin{center}
+	\bf
+	Logic and Computability  \\
+	Homework 6:  Distinguishability and Simulations \\
+\end{center}
+
+%\DoNotShare
+
+\textbf{Please read Handout 2 before embarking on this assignment.} It shows the level of rigor expected for proofs on this assignment.
+
+\section*{Challenges}
+
+\Problem{1}{Proving that Languages are not Regular!}{20}
+
+Use the \emph{Pairwise Distinguishability Theorem} to prove that each of the following languages is not regular.  Please read Handout 2 for an example of how to write such a proof.
+
+\begin{enumerate}
+	\item The language of all binary strings that contain exactly twice as many 0's as 1's.
+	\item The language of binary strings $L = \{x | \ \exists y \in \{ 0, 1\}^{*} \ \mbox{s.t.}\ x = yy \}$.  Note that a string of the form $yy$ is a string $y$ appearing twice ``back-to-back'' as in $011011$ or $11$ or $10001000$.
+\end{enumerate}
+
+\subsection*{Answer 1:}
+Note, I will cite the Handout given for some of the specific verbage in this solution.
+\begin{enumerate}
+	\item Consider the infinite set of strings, $S =\{0^{2i}| i \geq 0\}$. We show that S is pairwise distinguishable by showing that every pair of strings in S are distinguishable. Thus, consider an arbitrary pair of strings, $x, y \in S$, we can see clearly then that 
+	we can write $x = 0^{2k}$ and $y = 0^{2l}$ such that $k \neq l$. Thus, consider then that we can append the string $z = 1^k$ to $x$, which gives us $xz = 0^{2k}1^k$ which is an accepting state for our language, but, since $k \neq l$, it follows that $0^{2l}1^k$, we cannot say the same for $yz$.
+	Therefore, it follows that $x$ and $y$ are pairwise distinct.Thus, S is pairwise distinguishable and has
+	infinite cardinality, and thus no DFA can exist for our language.
+	\item Consider the infinite set of strings, $S =\{0^i1^{i}| i \geq 0\}$. We show that S is pairwise distinguishable by showing that every pair of strings in S are distinguishable. Thus, consider an arbitrary pair of strings, $x, y \in S$, we can see clearly then that 
+	we can write $x = 0^k1^{k}$ and $y = 0^l1^{l}$ such that $k \neq l$. Thus, consider then that we can append the string $z = 0^k1^k$ to $x$, which gives us $xz = 0^k1^{k}0^k1^k = xx$ which is an accepting state for our language, but, since $k \neq l$, it follows that $01^{l}01^k$, we cannot say the same for $yz$.
+	Therefore, it follows that $x$ and $y$ are pairwise distinct.Thus, S is pairwise distinguishable and has
+	infinite cardinality, and thus no DFA can exist for our language.
+\end{enumerate}
+
+\Problem{2}{Multiples of Three in Binary}{25}
+
+Use the Pairwise Distinguishability Theorem to prove that any DFA that accepts the language of multiples of three in binary requires at least three states. 
+
+\subsection*{Answer 2:}
+Consider the set $S = \{\epsilon, 1, 10\}$. We claim that this set is pairwise distinguishable. First, consider the pair $(\epsilon, 1)$. These two strings are distinguished by $z = \epsilon$ as $\epsilon z = \epsilon \in L$, but that $1z = z \not \in L$. Next, consider the paring $(\epsilon, 10)$. Once again let $z = \epsilon$, from which we can see that,
+$\epsilon z = \epsilon \in L$, but that $10z = 10 \not \in L$. Thus, the pair are pairwise distinguishable with respect to the string $\epsilon$. Now, consider that the pair $(10, 1)$ are pairwise with respect to the string $z=1$, as we can see that $10z = 101 \not \in L$, but that $1z = 11 \in L$. Therefore, since each element of $S$ is pairwise distinguishable and $|S| =3$, the Pairwise Distinguishability Theorem asserts that
+any DFA for $L$ must have at least 3 states.
+
+\Problem{3}{01 and 10!}{25}
+
+Consider the language of binary strings in which the number of occurrences of \verb+01+ is equal to the number of occurrences of \verb+10+,  For example,
+\verb+00011110+ is in the language because it has one \verb+01+ pattern and one \verb+10+ pattern.  The string \verb+01010+ is also in the language.  But, the string \verb+011001+ is not in the language.
+Is this language regular?  If so, submit a Prolog file that represents the DFA (using the DFA representation that we used in HW \#5) called \verb+problem3.pl+.  If it's not a regular language, submit a proof using the Pairwise Distinguishability Theorem in a file called \verb+problem3.pdf+ using the same problem upload (we will grade your proof manually).
+ 
+\subsection*{Answer 3:}
+Consider the proof tha tthe language is not regular by way of the Pairwise Distinguishability Theorem. Let $S$ be the infinite set, $\{(01)^i| i \geq 0\}$. We show that $S$ is pairwise distinguishable by showing that
+every pair of strings in $S$ are distinguishable. To that end, consider an arbitrary pair
+of two distinct strings $x, y \in S$. Then, there exists $k,l$ such that $k \neq l$ such that $x = (01)^k$ and $y = (01)^l$. Thus, let $z = (10)^k$. Therefore, we can see that $xz = (01)^k(10)^k \in L$, but that $yz = (01)^l(10)^k \not \in L$ since $k \neq l$. Therefore, $S$ is pairwise distinguishable and has infinite cardinality, and thus no DFA
+can exist for $L$. 
+
+\Problem{4}{Variants of DFAs}{30}
+
+Professor I.~Lai wakes up one morning and finds himself in a completely unfamiliar place.  He quickly realizes that he's been warped into another universe.  The one-eyed aliens there are very friendly, providing him with kiwi-lime-watermelon lollipops and showing him several of their intriguing models of computation.  For each of the following models of computation, indicate whether it's \textbf{more powerful} or has the \textbf{same power} as DFAs and prove your answer.  
+	
+\begin{enumerate}
+
+	\item \textbf{Middle-Window DFAs:}  A Middle-Window DFA is like a DFA but the machine can always see the symbol at the middle of the tape.  If the length of the input string is even, there are two middle symbols, in which case the middle-window DFA sees the ``left middle''.  For example, if the input was ``milk'', the middle-window DFA would see the ``i''.  \emph{Note that each time the tape head moves to the right, the middle window floats to always be at the middle of the remaining string.  So, after reading the ``m'' in milk, the remaining string is ``ilk'' and the middle window now sees the ``l''.}  More formally, a Middle-Window DFA is a 5-tuple $(Q, \Sigma, \delta, q_0, F)$ where the components are analogous to a DFA but $\delta: Q \times \Sigma \times \Sigma \rightarrow Q$ is a transition function from the current state, current symbol, and middle window symbol to the next state.
+	
+	\item \textbf{Rear-Window DFAs:}  A Rear-Window DFA is like a DFA but the machine can always see the last symbol on the tape. A  Rear-Window DFA is a 
+	5-tuple $(Q, \Sigma, \delta, q_0, F)$ where all the components are analogous to a DFA except that $\delta:  Q \times \Sigma \times \Sigma \rightarrow Q$ is a transition function from the current state, current symbol, and last symbol to the next state.
+		
+\end{enumerate}
+
+\subsection*{Answer 4:}
+\begin{enumerate}
+	\item Consider the proof that Middle-Window DFAs are more powerful than regular DFAs. First, we will show that any language accepted by regular DFAs would also be accepted by our Middle-Window DFAs. Given a $DFA, \; D = (Q, \Sigma, \delta, q_0, F)$, we can construct a Middle-Window DFA M = $(Q, \Sigma, \delta ', q_0, F)$ that is identical to the DFA, with regards to the fact that $\delta(q_i, \sigma) = \delta '(q_i, \sigma, \sigma_2)$. Thus, this constructed
+	Middle-Window DFA behaves just like the DFA but does not pay attention to what the middle value is. \\\\However, consider the language $L$ such that we accept any string with middle element $1$, but that we reject any other string. Thus, consider the following proof that $L$ is non-regular for a regular DFA. Consider the infinite set $S = \{0^i1 | i \geq 0\}$. We show that $S$ is pairwise distinguishable by showing that every pair of strings in $S$ are distinguishable. To that end, consider an arbitrary pair of two distinct strings $x, y \in S$. Then there exist $k,l$ such that $k \neq l$ and $l > k+1$ and $x = 0^k1$ and $y = 0^l1$. Let $z = 0^k$. We can see then that $xz = 0^k10^k \in S$, but that $yz = 0^l10^k \not \in S$. Therefore, $S$ is pairwise distinguishable and has infinite cardinality, and thus no DFA
+	can exist for $L$. \\\\
+	Now, consider that we can define a Middle-Widow DFA that does accept this simply by defining the transition $\delta '(q_0, 0, 1) = q_1$, $\delta '(q_0, 1, 1) = q_1$, $\delta '(q_0, 0, 0) = q_2$, $\delta '(q_0, 1, 0) = q_2$, where $q_1$ is the sink state for acceptance (cannot leave), and $q_2$ is the sink state for rejection (also cannot leave). We note that this machine accepts exactly those strings in L and
+	thus accepts a non-regular language. Thus, we have shown that Middle-Window DFAs are more powerful than DFAs.
+	\item Consider the proof that Rear-Window DFA is more powerful than a regular DFA. \\\\
+	First, we will show that any language accepted by regular DFAs would also be accepted by our Rear-Window DFAs. Given a DFA, $D = (Q, \Sigma, \delta, q_0, F)$, consider that we can construct a Rear-Window DFA, $R = (Q, \Sigma, \delta ', q_0, F)$ that is identitical to $D$ with regards to the fact that with regards to the fact that $\delta(q_i, \sigma) = \delta '(q_i, \sigma, \sigma_2)$, or that we just ignore what the last element is in our string. Thus, $R$ behaves the same as $M$ as desired.\\\\
+	However, consider the language $L$ consisting of binary palindromes. We have proven in class that this is a non-regular language. However, we will now define a Rear-Window DFA that accepts the language. Let $R = (Q, \Sigma, \delta ', q_0, F)$, with the property that $q_0$ is an acceptance state and $\delta '(q_0, 0, 0) = q_0$, $\delta '(q_0, 1, 1) = q_0$, $\delta '(q_0, 0, 1) = q_1$, $\delta '(q_0, 1, 0) = q_1$, and where every transition within $q_1$ transitions back to itself (essentially a rejection sink state).
+	At a high level, so long as the front element equals the back element, we remain in our acceptance state, and if they differ, we reject the string, meaning that we have constructed a Rear-Window DFA that accepts the language. Thus, we have shown that Rear-Window DFAs are more powerful as DFAs as desired.
+\end{enumerate}
+
+\end{document}
+
+
