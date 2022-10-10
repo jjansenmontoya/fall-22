@@ -75,10 +75,7 @@ Consider the language of binary strings in which the number of occurrences of \v
 Is this language regular?  If so, submit a Prolog file that represents the DFA (using the DFA representation that we used in HW \#5) called \verb+problem3.pl+.  If it's not a regular language, submit a proof using the Pairwise Distinguishability Theorem in a file called \verb+problem3.pdf+ using the same problem upload (we will grade your proof manually).
  
 \subsection*{Answer 3:}
-Consider the proof that the language is not regular by way of the Pairwise Distinguishability Theorem. Let $S$ be the infinite set, $\{(01)^i| i \geq 0\}$. We show that $S$ is pairwise distinguishable by showing that
-every pair of strings in $S$ are distinguishable. To that end, consider an arbitrary pair
-of two distinct strings $x, y \in S$. Then, there exists $k,l$ such that $k \neq l$ such that $x = (01)^k$ and $y = (01)^l$. Thus, let $z = (10)^k$. Therefore, we can see that $xz = (01)^k(10)^k \in L$, but that $yz = (01)^l(10)^k \not \in L$ since $k \neq l$. Therefore, $S$ is pairwise distinguishable and has infinite cardinality, and thus no DFA
-can exist for $L$. 
+See attatched Prolog File.
 
 \Problem{4}{Variants of DFAs}{30}
 
@@ -100,10 +97,12 @@ Professor I.~Lai wakes up one morning and finds himself in a completely unfamili
 	can exist for $L$. \\\\
 	Now, consider that we can define a Middle-Widow DFA that does accept this simply by defining the transition $\delta '(q_0, 0, 1) = q_1$, $\delta '(q_0, 1, 1) = q_1$, $\delta '(q_0, 0, 0) = q_2$, $\delta '(q_0, 1, 0) = q_2$, where $q_1$ is the sink state for acceptance (cannot leave), and $q_2$ is the sink state for rejection (also cannot leave). We note that this machine accepts exactly those strings in L and
 	thus accepts a non-regular language. Thus, we have shown that Middle-Window DFAs are more powerful than DFAs.
-	\item Consider the proof that Rear-Window DFA is more powerful than a regular DFA. \\\\
-	First, we will show that any language accepted by regular DFAs would also be accepted by our Rear-Window DFAs. Given a DFA, $D = (Q, \Sigma, \delta, q_0, F)$, consider that we can construct a Rear-Window DFA, $R = (Q, \Sigma, \delta ', q_0, F)$ that is identitical to $D$ with regards to the fact that with regards to the fact that $\delta(q_i, \sigma) = \delta '(q_i, \sigma, \sigma_2)$, or that we just ignore what the last element is in our string. Thus, $R$ behaves the same as $M$ as desired.\\\\
-	However, consider the language $L$ consisting of binary palindromes. We have proven in class that this is a non-regular language. However, we will now define a Rear-Window DFA that accepts the language. Let $R = (Q, \Sigma, \delta ', q_0, F)$, with the property that $q_0$ is an acceptance state and $\delta '(q_0, 0, 0) = q_0$, $\delta '(q_0, 1, 1) = q_0$, $\delta '(q_0, 0, 1) = q_1$, $\delta '(q_0, 1, 0) = q_1$, and where every transition within $q_1$ transitions back to itself (essentially a rejection sink state).
-	At a high level, so long as the front element equals the back element, we remain in our acceptance state, and if they differ, we reject the string, meaning that we have constructed a Rear-Window DFA that accepts the language. Thus, we have shown that Rear-Window DFAs are more powerful as DFAs as desired.
+	\item Consider the proof that Rear-Window DFAs are as powerful as our regular DFAs.\\\\
+	We show that DFAs and NFAs are equally powerful. To show that, we first show that any language accepted by a DFA is also accepted by a Rear-Window DFA and then we show that every language accepted by a Rear-Window DFA is accepted by a DFA. First, consider a language $L$ that is accepted by a DFA, $D = (Q, \Sigma, \delta, q_0, F)$. We can see that $L$ can also be accepted by a Rear-Window DFA $R = (Q, \Sigma, \delta ', q_0, F)$, where we define $\delta(q_i, \sigma_1) = \delta '(q_i, \sigma_1, \sigma_2)$, or in other words, that we just use all of the transitions from our DFA, and only look at the next symbol in our string (ignoring the last symbol). Under this construction, $N$ accepts exactly the inputs accepted by $D$.\\\\
+	Conversely, let $L$ be a language accepted by a Rear-Window DFA, $R = (Q, \Sigma, \delta, q_0, F)$, then we can construct a DFA, $D = (Q, \Sigma', \delta', q_0', F')$ where we can define the following properties of $D$ as follows,
+	\begin{itemize}
+		\item For each $\sigma \in \Sigma$ and $\sigma_f \in \Sigma$, where $\sigma_f$ is the last symbol in the string, then let $\delta'(q_i, \sigma_1) = \bigcup_{\sigma_f \in \Sigma}\delta(q_i, \sigma_1, \sigma_f)$
+	\end{itemize}
 \end{enumerate}
 
 \end{document}
