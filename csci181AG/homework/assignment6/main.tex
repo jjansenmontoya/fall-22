@@ -37,7 +37,8 @@ Without using extra memory, explain how we can increase the throughput of binary
 \end{problem}
 
 \subsection*{Answer 1:}
-
+One way that we can increase the throughput of binary search lookups while avoiding the problems of multiple probes to the same memory location is by allowing the binary searches for different elements to overlap with one another. We can do this by enqueuing different searches and then ensuring that we do not allow any searches to access the same element by allowing each successive search to begin after the previous search has decided which element to access next. For example, we would allow one search to begin at the element "D", and then once the search decided to restrict itself to the left or right half of the array and accesses the next element in its search (or is completed), then we would allow the next search to access "D", and so forth. For example
+if we were searching for elements, "A", "B", "F", then we would allow our first search to access "D", then once it realizes that it will focus on the left half of the array, then it will access "B", and at the same time the search for "A" will begin by accessing "D". Finally, the first search would then access "A", the second accessing "B", and the final search would begin at "D".
 
 \begin{problem}{2: Building a Firewall}
 In this problem, you will construct the rules for a small firewall and build two types of tries from your rule database.
@@ -119,8 +120,20 @@ We looked at firewalls in Problem 2, but another reason to look at multiple fiel
 
 I found \href{https://www.cs.princeton.edu/courses/archive/fall21/cos109/neutrality.pdf}{this} article to be helpful in presenting the technical details, but you may use any source you'd like (please cite the sources you used).
 \end{problem}
+
+\subsection*{Answer 3:}
+Network discrimination can occur in a couple of different ways as described by the author. The discrimination arises from the situation where congestion on an internet network causes the routers to drop particular packets in order to relieve congestion. The first type of discrimination described by the author is called "minimal discrimination", which occurs in this situation when the router needs to drop packets to alleviate the traffic. In this instance, the network alleviates the traffic by discarding lower-priority packets when necesssary. In all other instances for minimal discrimination, the low priority packets do not 
+play second fiddle to the high-priority packets. However, in "non-minimal" discrimination, routers can limit the network capacity that low-priority packets can access, which can lead to the discarding of low-priority packets before the network is at its capacity. While the first may assist the speed of high-priority packets to being delivered, especially in moments when the network is congested, the second does not help out high-priority packets, but simply serves to disservice the low-priority packets. There can also be delay discrimination which can occur during buffering, in which minimal discrimination will give buffering priority to the high-priority packets
+and the non-minimal discrimination would result in the slowing of low-priority packets even when there is network capacity to send the packet.
+\\\\
+The main arguments against network neutrality is that ISPs have the ability to currently discriminate different types of traffic based on priority which can lead to future manipulations of peoples network speeds which can inturn force individuals to pay more of internet service to prevent the kind of discrimination described above. Similarly, ISPs can impose discrimination on different types of traffice that a user produces, which can in turn force users away from using different applications if the ISPs can determine from where the traffic comes from and it happens to be a product that they want to disincentive users from. The argument is that
+these freedoms and capabilities give ISPs far too much power that they can leverage to hurt consumers financially and with respect to their choices of products to use on networks. However, some argumetns against net neutrality are that Quality of Service gaurentees for different types of traffic such as video are supported by network providers. However, with the imposing of net neutrality rules, by forcing all types of traffic to be treated the same by routers would have the unintended conflict of negatively affecting traffic such as video by not allowing for QoS gaurentees for said forms of browsing and internet access. Similarly, arguments against 
+net neutrality argue that enforcing net neutrality rules would be error prone as well as difficult to even do.
+
 \begin{problem}{4}
 How long did this assignment take you?
 \end{problem}
+\subsection*{Answer 4:}
+This assignment took me $\approx 6$ hours.
 \end{document}
 

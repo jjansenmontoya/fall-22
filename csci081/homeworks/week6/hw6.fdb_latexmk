@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1665444760 "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.tex" "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.pdf" "hw6" 1665444761
+["pdflatex"] 1665444760 "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.tex" "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.pdf" "hw6" 1665444784
   "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.aux" 1665444761 32 c81c40425fbb5e93b90fba65da0b5e61 ""
   "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.tex" 1665444760 10407 ba7b86a630a6071f3c4ae29c8fee4ffd ""
   "/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
@@ -150,8 +150,8 @@
   "hw6.aux" 1665444761 32 c81c40425fbb5e93b90fba65da0b5e61 "pdflatex"
   "hw6.tex" 1665444760 10407 ba7b86a630a6071f3c4ae29c8fee4ffd ""
   (generated)
+  "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.log"
   "hw6.log"
-  "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.pdf"
   "hw6.pdf"
   "hw6.aux"
-  "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.log"
+  "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week6/hw6.pdf"
