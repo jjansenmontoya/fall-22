@@ -1,0 +1,195 @@
+---
+title: "HW5 Math158"
+author: "Joshua Jansen-Montoya"
+date: '2022-10-06'
+output: pdf_document
+---
+
+### Problem 6.1
+Using the sat dataset, fit a model with the total SAT score as the response and expend, salary, ratio and takers as predictors. Perform regression diagnostics on this model to answer the following questions. Display any plots that are relevant. Do not provide any plots about which you have nothing to say. Suggest possible improvements or corrections to the model where appropriate.
+1. Check the constant variance assumption for the errors.
+2. Check the normality assumption.
+3. Check for large leverage points.
+4. Check for outliers.
+5. Check for influential points.
+6. Check the structure of the relationship between the predictors and the response.
+
+### Answer 6.1
+1. We can check the constant variance assumption for the errors with the following R-code,
+```{r 6.1a}
+  library(faraway)
+  ?sat
+  lmod <- lm(total ~ expend+salary+ ratio+ takers, data = sat)
+  plot(fitted(lmod), resid(lmod))
+  abline(h =0)
+```
+From which, we can see that there appears to be almost constant variance within our model and thus our assumption should be good.
+2. We can check the normality assumption as follows,
+```{r 6.1b}
+  qqnorm(resid(lmod))
+  qqline(resid(lmod))
+```
+Using this plot, we can see that our assumption of normality is indeed fufilled.
+3. We can check for large leverage points as follows, 
+```{r 6.1c}
+  hatvalues(lmod) > 2*mean(hatvalues(lmod))
+```
+From this result, we can see that we have outliers for California, Connecticut, New Jersey, and Utah.
+4. We can check for outliers as follows,
+```{r 6.1d}
+  rstandard(lmod)[abs(rstandard(lmod))>2]
+  
+```
+Which we can see that the points corresponding to New Hampshire, North Dakota, Utah, and West Virginia are all high leverage points.
+5. Now, we can check for influential points as follows,
+```{r 6.1e}
+  cooks.distance(lmod)[29] > 4/length(cooks.distance(lmod))
+  cooks.distance(lmod)[34] > 4/length(cooks.distance(lmod))
+  cooks.distance(lmod)[44] > 4/length(cooks.distance(lmod))
+  cooks.distance(lmod)[48] > 4/length(cooks.distance(lmod))
+```
+From which we can see that Utah and West Virginia are both influential points.
+6. Checking for the structure between the response and predictor variable, we can see that,
+```{r 6.1f}
+  termplot(lmod,partial.resid=TRUE, terms=1)
+  termplot(lmod,partial.resid=TRUE, terms=2)
+  termplot(lmod,partial.resid=TRUE, terms=3)
+  termplot(lmod,partial.resid=TRUE, terms=4)
+```
+Looking at the output of our termplot, we can see that there seem to be slight positive linear relationships between expend and salary and their partials and a weak negative linear relationship between ratio and its partials, but a stronger negative relationship between takers and its partials.
+
+### Problem 6.3
+For the prostate data, fit a model with lpsa as the response and the other variables as predictors. Answer the questions posed in the first question.
+
+### Answer 6.3
+1. We can check the constant variance assumption for the errors with the following R-code,
+```{r 6.3a}
+  library(faraway)
+  ?prostate
+  lmod <- lm(lpsa ~ lcavol+lweight+age+lbph+svi+lcp+gleason+pgg45, data = prostate)
+  plot(fitted(lmod), resid(lmod))
+  abline(h =0)
+```
+From which, we can see that there appears to be almost constant variance within our model and thus our assumption should be good.
+2. We can check the normality assumption as follows,
+```{r 6.3b}
+  qqnorm(resid(lmod))
+  qqline(resid(lmod))
+```
+Using this plot, we can see that our assumption of normality is indeed fufilled.
+3. We can check for large leverage points as follows, 
+```{r 6.3c}
+  hatvalues(lmod) > 2*mean(hatvalues(lmod))
+```
+From this result, we can see that we have outliers for entries 32, 37, 41, 74,  and 92.
+4. We can check for outliers as follows,
+```{r 6.3d}
+  rstandard(lmod)[abs(rstandard(lmod))>2]
+```
+Which we can see that the points corresponding to entries 39, 47, 69, 95, and 97.
+5. Now, we can check for influential points as follows,
+```{r 6.3e}
+  cooks.distance(lmod)[39] > 4/length(cooks.distance(lmod))
+  cooks.distance(lmod)[47] > 4/length(cooks.distance(lmod))
+  cooks.distance(lmod)[69] > 4/length(cooks.distance(lmod))
+  cooks.distance(lmod)[95] > 4/length(cooks.distance(lmod))
+  cooks.distance(lmod)[97] > 4/length(cooks.distance(lmod))
+```
+From which we can see that all of these points are influential points.
+6. Checking for the structure between the response and predictor variable, we can see that,
+```{r 6.3f}
+  termplot(lmod,partial.resid=TRUE, terms=1)
+  termplot(lmod,partial.resid=TRUE, terms=2)
+  termplot(lmod,partial.resid=TRUE, terms=3)
+  termplot(lmod,partial.resid=TRUE, terms=4)
+  termplot(lmod,partial.resid=TRUE, terms=5)
+  termplot(lmod,partial.resid=TRUE, terms=6)
+  termplot(lmod,partial.resid=TRUE, terms=7)
+  termplot(lmod,partial.resid=TRUE, terms=8)
+```
+Looking at our termplots, we can see that there seems to be very little linear relationship between lcp, gleason, lbph, svi and pgg45 and their respective partials, as well as no discernable structure between the partials of lweight and age and their respective variables, but that there seems to be a positive linear relationship between lcavol and the partials of lcavol.
+
+### Problem 6.5
+Using the cheddar data, fit a model with taste as the response and the other three variables as predictors. Answer the questions posed in the first question.
+
+
+### Answer 6.5
+1. We can check the constant variance assumption for the errors with the following R-code,
+```{r 6.5a}
+  library(faraway)
+  lmod <- lm(taste ~ Acetic+H2S+Lactic, data = cheddar)
+  plot(fitted(lmod), resid(lmod))
+  abline(h =0)
+```
+From which, we can see that there appears to be almost constant variance within our model and thus our assumption should be good.
+2. We can check the normality assumption as follows,
+```{r 6.5b}
+  qqnorm(resid(lmod))
+  qqline(resid(lmod))
+```
+Using this plot, we can see that our assumption of normality is indeed fufilled.
+3. We can check for large leverage points as follows, 
+```{r 6.5c}
+  hatvalues(lmod) > 2*mean(hatvalues(lmod))
+```
+From this result, we can see that we do not have any high leverage points.
+4. We can check for outliers as follows,
+```{r 6.5d}
+  rstandard(lmod)[abs(rstandard(lmod))>2]
+```
+Which we can see that the points corresponding to entry 15 is an outlier.
+5. Now, we can check for influential points as follows,
+```{r 6.5e}
+  cooks.distance(lmod)[15] > 4/length(cooks.distance(lmod))
+```
+From which we can see that entry 15 is an influential points.
+6. Checking for the structure between the response and predictor variable, we can see that,
+```{r 6.5f}
+  termplot(lmod,partial.resid=TRUE, terms=1)
+  termplot(lmod,partial.resid=TRUE, terms=2)
+  termplot(lmod,partial.resid=TRUE, terms=3)
+```
+Looking at our plots, we can see that there does not seem to be any relationship between the partials of Acetic acid but that there does seem to be some positive linear relationship for the partials for H2S and Lactic acid, but nothing indicating any underlying structure.
+
+### Problem 6.7
+Using the tvdoctor data, fit a model with life as the response and the other two variables as predictors. Answer the questions posed in the first question.
+
+
+### Answer 6.7
+1. We can check the constant variance assumption for the errors with the following R-code,
+```{r 6.7a}
+  library(faraway)
+?tvdoctor
+  lmod <- lm(life ~ tv + doctor, data = tvdoctor)
+  plot(fitted(lmod), resid(lmod))
+  abline(h =0)
+```
+From which, we can see that there appears to be almost constant variance within our model and thus our assumption should be good.
+2. We can check the normality assumption as follows,
+```{r 6.7b}
+  qqnorm(resid(lmod))
+  qqline(resid(lmod))
+```
+Using this plot, we can see that our distribution is not exactly normal, but that it follows the trends fairly well.
+3. We can check for large leverage points as follows, 
+```{r 6.7c}
+  hatvalues(lmod) > 2*mean(hatvalues(lmod))
+```
+From this result, we can see that our high leverage points are Bangladesh, Ethiopia, and Myanmar.
+4. We can check for outliers as follows,
+```{r 6.7d}
+  rstandard(lmod)[abs(rstandard(lmod))>2]
+```
+Which we can see that the points corresponding to entries Ethiopia and Sudan are both outliers.
+5. Now, we can check for influential points as follows,
+```{r 6.7e}
+  cooks.distance(lmod)[8] > 4/length(cooks.distance(lmod))
+  cooks.distance(lmod)[30] > 4/length(cooks.distance(lmod))
+```
+From which we can see that both Ethiopia and Sudan are influential points.
+6. Checking for the structure between the response and predictor variable, we can see that,
+```{r 6.7f}
+  termplot(lmod,partial.resid=TRUE, terms=1)
+  termplot(lmod,partial.resid=TRUE, terms=2)
+```
+Looking at our plots, we can see that there does not seem to be any discernable relationship between our two variables and the partials that we obtain.

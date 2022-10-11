@@ -1,0 +1,65 @@
+---
+title: "Lab3"
+author: "Joshua Jansen-Montoya"
+date: '2022-10-11'
+output: pdf_document
+---
+
+```{r initial}
+calif = read.table("http://www.stat.cmu.edu/~cshalizi/uADA/12/hw/01/cadata.dat", header=TRUE)
+
+library(scatterplot3d)
+plot(calif$Longitude,calif$Latitude,pch=21, col=terrain.colors(11)[1+floor(calif$MedianHouseValue/50e3)],
+       bg=terrain.colors(11)[1+floor(calif$MedianHouseValue/50e3)],
+       xlab="Longitude",ylab="Latitude",main="Median House Prices")
+legend(x="topright",legend=(50*(1:11)),fill=terrain.colors(11))
+
+plot(calif$Longitude,calif$Latitude,pch=21,
+     col=terrain.colors(11)[1+floor(calif$MedianHouseValue/50e3)], bg=terrain.colors(11)[1+floor(calif$MedianHouseValue/50e3)],
+     cex=sqrt(calif$Population/median(calif$Population)),
+     xlab="Longitude",ylab="Latitude",main="Median House Prices",
+     sub="Circle area proportional to population")
+legend(x="topright",legend=(50*(1:11)),fill=terrain.colors(11))
+
+scatterplot3d(calif$Longitude,calif$Latitude,calif$MedianHouseValue,
+              pch=20,scale.y=0.4,type="h",cex.symbol=0.01,
+              xlab="Longitude",ylab="Latitude",zlab="Median House Value")
+
+fit = lm(MedianHouseValue ~ ., data=calif)
+summary(fit)
+
+signif(coefficients(fit),3)
+
+signif(summary(fit)$r.squared,digits=3)
+```
+
+The variables that seem the most important seem to be longitude latitude, and median income which makes sense given the fact that there is a massive
+Difference in the price of a house in California depending on whre you are from such as with Bakersfield versus San Francisco.
+Similarly, if you make a lot more money than other people, then it would make sense that you would be able to afford a more expensive house which is why Median income afffecting the output makes a lot of sense.
+
+```{r normal}
+  qqnorm(resid(fit))
+  qqline(resid(fit))
+```
+Looking at our residuals, we can see that we do not quite have our normalacy.
+
+```{r plot}
+  plot(fit)
+  calif_sample = calif[sample(nrow(calif), 5000),]
+  fit_sample = lm(MedianHouseValue ~ ., data=calif_sample)
+  shapiro.test(residuals(fit_sample))
+```
+Looking at the plot of our residuals versus our fitted, we can see that there is a clustering of points together and that the red line is not approximately fit nor close to zero, and thus, we can determine that our residuals are not normal. Our Shapiro-Wilks test using a random sample of our data agrees with this with high probability that our data is not normal.
+
+
+```{r log}
+  fitLog = lm(log(MedianHouseValue) ~ ., data=calif)
+  summary(fitLog)
+  plot(fitLog)
+```
+
+We prefer the original model because even it still is not perfectly normal, the logged values are not normal either. We would instead prefer the more natural representation of the points in this instance which leads us to defer to the first model.
+
+
+
+
