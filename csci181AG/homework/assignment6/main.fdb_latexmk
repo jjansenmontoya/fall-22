@@ -1,7 +1,7 @@
 # Fdb version 3
-["pdflatex"] 1665472634 "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment6/main.tex" "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment6/main.pdf" "main" 1665472636
-  "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment6/main.aux" 1665472635 787 54a2abbd3b83147f1937f1e3d4e1a8bd ""
-  "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment6/main.tex" 1665472634 10713 81a1783c2cfdac49de4da6c30c4e5f56 ""
+["pdflatex"] 1665541939 "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment6/main.tex" "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment6/main.pdf" "main" 1665541941
+  "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment6/main.aux" 1665541941 787 3eb0091fa906d28b8ddb642f1a673c32 ""
+  "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment6/main.tex" 1665541939 10788 1adcd281d52ee56602c024e66b5448db ""
   "/usr/local/texlive/2021/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -94,13 +94,14 @@
   "/usr/local/texlive/2021/texmf.cnf" 1616695596 577 4c1911a7228e554c6032256d3cf5567d ""
   "figures/bin_search.pdf" 1665048228 7857 adb992dd94ada813c8e6f179eae13035 ""
   "figures/firewall.pdf" 1665048228 53333 6b837d97dd594ce82826a0e97e11ae7c ""
-  "main.aux" 1665472635 787 54a2abbd3b83147f1937f1e3d4e1a8bd "pdflatex"
-  "main.out" 1665472635 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "main.tex" 1665472634 10713 81a1783c2cfdac49de4da6c30c4e5f56 ""
+  "hw6pr2.jpeg" 1665541821 342601 84fc3d3de5a506f1368e2ae7472cef6d ""
+  "main.aux" 1665541941 787 3eb0091fa906d28b8ddb642f1a673c32 "pdflatex"
+  "main.out" 1665541940 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "main.tex" 1665541939 10788 1adcd281d52ee56602c024e66b5448db ""
   (generated)
-  "main.pdf"
-  "main.log"
-  "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment6/main.log"
-  "main.aux"
   "main.out"
+  "main.log"
   "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment6/main.pdf"
+  "main.aux"
+  "main.pdf"
+  "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment6/main.log"

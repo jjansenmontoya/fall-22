@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2022.3.9)  11 OCT 2022 00:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2022.3.9)  11 OCT 2022 19:32
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -453,28 +453,36 @@ File: omscmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 108.
+<hw6pr2.jpeg, id=23, 1024.82875pt x 1435.3625pt>
+File: hw6pr2.jpeg Graphic file (type jpg)
+<use hw6pr2.jpeg>
+Package pdftex.def Info: hw6pr2.jpeg  used on input line 117.
+(pdftex.def)             Requested size: 461.16867pt x 645.90717pt.
  [2 </Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment6/figures/firewall.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 125--132
+Overfull \vbox (12.93547pt too high) has occurred while \output is active []
+
+ [3 </Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment6/hw6pr2.jpeg>]
+Underfull \hbox (badness 10000) in paragraph at lines 127--134
 
  []
 
-[3] (/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment6/main.aux)
+[4] (/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment6/main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 9919 strings out of 478994
- 144780 string characters out of 5858185
- 461845 words of memory out of 5000000
- 27256 multiletter control sequences out of 15000+600000
+ 9927 strings out of 478994
+ 144875 string characters out of 5858185
+ 460845 words of memory out of 5000000
+ 27261 multiletter control sequences out of 15000+600000
  410688 words of font info for 56 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  71i,9n,74p,839b,515s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment6/main.pdf" (3 pages, 148614 bytes).
+Output written on "/Users/jrjm/Desktop/fall 22/csci181AG/homework/assignment6/main.pdf" (4 pages, 491692 bytes).
 PDF statistics:
- 68 PDF objects out of 1000 (max. 8388607)
- 50 compressed objects within 1 object stream
- 12 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 74 PDF objects out of 1000 (max. 8388607)
+ 54 compressed objects within 1 object stream
+ 13 named destinations out of 1000 (max. 500000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
