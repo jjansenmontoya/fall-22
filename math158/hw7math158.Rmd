@@ -1,0 +1,131 @@
+---
+title: "HW7Math158"
+author: "Joshua Jansen-Montoya"
+date: '2022-10-26'
+output: pdf_document
+---
+
+## Problem 8.1
+Researchers at National Institutes of Standards and Technology (NIST) collected pipeline data on ultrasonic measurements of the depth of defects in the Alaska pipeline in the field. The depth of the defects were then remeasured in the laboratory. These measurements were performed in six different batches. It turns out that this batch effect is not significant and so can be ignored in the analysis that follows. The laboratory measurements are more accurate than the in-field measurements, but more time consuming and expensive. We want to develop a regression equation for correcting the in-field measurements.
+1. Fit a regression model Lab ~ Field. Check for non-constant variance.
+2. We wish to use weights to account for the non-constant variance. Here we split the range of Field into 12 groups of size nine (except for the last group which has only eight values). Within each group, we compute the variance of Lab as varlab and the mean of Field as meanfield. Supposing pipeline is the name of your data frame, the following R code will make the needed computations:
+```{r 8.1q}
+  library(faraway)
+  i <- order(pipeline$Field)
+  npipe <- pipeline[i,]
+  ff <- gl(12,9)[-108]
+  meanfield <- unlist(lapply(split(npipe$Field,ff),mean))
+  varlab <- unlist(lapply(split(npipe$Lab,ff),var))
+```
+Suppose we guess that the the variance in the response is linked to the predictor in the following way:
+$var(Lab) = a_0Field^{a_1}$ Regress log(varlab) on log(meanfield) to estimate $a_0$ and $a_1$ . (You might choose to remove the last point.) Use this to determine appropriate weights in a WLS fit of Lab on Field. Show the regression summary.
+3. An alternative to weighting is transformation. Find transformations on Lab and/or Field so that in the transformed scale the relationship is approximately linear with constant variance. You may restrict your choice of transformation to square root, log and inverse.
+
+## Answer 8.1
+1. We can fit the regression model as follows,
+```{r 8.1lmod}
+  library(faraway)
+  lmod = lm(Lab ~ Field, data = pipeline)
+  summary(lmod)
+  plot(fitted(lmod),residuals(lmod),xlab="Fitted",ylab="Residuals")
+  abline(h=0)
+```
+We can see that we have fairly constant variance but that we have a few points that may be problematic for our model.
+2. We can regress log(varlab) on log(meanfield) using the following R-code
+```{r log(var) and log(meanfield)}
+  lmod <- lm(log(varlab)~log(meanfield), data = pipeline)
+  summary(lmod)
+```
+From there, we can make the following adjustment to the weights,
+```{r weighted8.1}
+  lmodWeight <- lm(Lab ~ Field, data = pipeline, weights=1/(0.8264*Field^0.0351))
+  summary(lmodWeight)
+```
+3. We can apply the following transformations to our data so that it appears linear with approximately constant variance as follows.
+```{r transformatio 8.1}
+  lmod = lm(Lab ~ sqrt(Field), data = pipeline)
+  plot(fitted(lmod),residuals(lmod),xlab="Fitted",ylab="Residuals")
+  abline(h=0)
+```
+thus, we will take the square root relationship, as we can also verify this with our box cox plot as follows
+```{r box cox 8.1}
+  field <- pipeline$Field
+  lab <- pipeline$Lab
+  library(MASS)
+  bc <- boxcox(lab ~ field)
+  (lambda <- bc$x[which.max(bc$y)])
+```
+which gives us $\approx 0.5$ corresponding to a square root.
+## Problem 8.2
+Using the divusa data, fit a regression model with divorce as the response and unemployed, femlab, marriage, birth and military as predictors.
+1. Make two graphical checks for correlated errors. What do you conclude?
+2. Allow for serial correlation with an AR(1) model for the errors. (Hint: Use maximum likelihood to estimate the parameters in the GLS fit by gls(..., method="ML", ...)). What is the estimated correlation and is it significant? Does the GLS model change which variables are found to be significant?
+3. Speculate why there might be correlation in the errors.
+
+## Answer 8.2
+1. Fitting the regression model as desired, we obtain,
+```{r fitting divusa}
+  library(faraway)
+  lmod <- lm(divorce ~ unemployed + femlab + marriage + birth +military, data = divusa)
+```
+Now, we can graphically check for correlated errors as follows,
+```{r correlated errors}
+  acf(lmod$residuals)
+  pacf(lmod$residuals)
+```
+We can note that there appears to be a higher correlation to the residuals in the for our lower lag values, and thus, we can say that we do have correlated errors.
+2. Using the hint in the problem statement, we find that,
+```{r 8.2.2gls}
+  require(nlme)
+  glsMod <- gls(divorce ~ unemployed + femlab + marriage + birth +military, data = divusa,method="ML", correlation=corAR1())
+  #summary(glsMod)
+  glsMod
+```
+Looking at the results of our gls, we can see that we get a correlation of apparently 0.97155, which indicates high autocorrelation errors and we can note that it is significant. Now, comparing the coefficients with those of our earlier linear model, we can see that we obtain,
+```{r 8.2.2 ols}
+  summary(lmod)
+```
+We can see that the significance of the coefficients appears to change with which variables end up being significant.
+3. When we have correlation in the errors, that usually indicates a some kind of underlying trend to the errors that our gls outputs. However, looking at our data, we can consider the fact that some of our data may be correlated due to the fact that we are taking annual trends over years, and thus, there is a decent change that one years data may not be independent of the data of another year if there are consistent global trends that are not captured in our data, since we are dealing with a time series over the 1920s.
+
+
+
+## Problem 8.3
+For the salmonella dataset, fit a linear model with colonies as the response and log(dose+1) as the predictor. Check for lack of fit.
+
+## Answer 8.3
+We can fit the linear model as follows and follow the process described in the book to check for lack of fit,
+```{r 8.3 lmod}
+  library(faraway)
+  lmodColonies <- lm(colonies ~ log(dose+1), data = salmonella)
+  summary(lmodColonies)
+  plot(colonies ~ log(dose+1), salmonella,xlab="log(dose+1)", ylab="Colonies")
+  abline(coef(lmodColonies))
+```
+From these diagnostic plots, it appears that there may be a lack of fit, especially as indicated by the multiple $R^2$ which is 0.2201. Further looking into the apparent lack of fit, we can see that,
+```{r lack of fit 8.3}
+  lmoda <- lm(colonies ~ factor(log(dose+1)), salmonella)
+  anova(lmodColonies, lmoda)
+```
+We can see that as our pr(>F) is fairly small, although we do not have a large $R^2$, we can be confident that we do not have an issue of lack of fit from our model, as the Pr(>F) is not within our boundaries for significance.
+
+## Problem 8.4
+For the cars dataset, fit a linear model with distance as the response and speed as the predictor. Check for lack of fit. 
+
+## Answer 8.4
+We can fit the linear model as follows and follow the process described in the book to check for lack of fit,
+```{r 8.4 lmod}
+  library(faraway)
+  lmodCars <- lm(dist ~ speed, data = cars)
+  summary(lmodCars)
+  plot(dist ~ speed, cars,xlab="log(dose+1)", ylab="Colonies")
+  abline(coef(lmodCars))
+```
+Now, we can check for a lack of fit as follows,
+```{r lack of fit 8.4}
+  lmodaCars <- lm(dist ~ factor(speed), cars)
+  anova(lmodCars, lmodaCars)
+```
+Looking at these results and at our graphs, we can note that although we have a lower $R^2$ value, our anova test indicates to us that we have a good fitting linear model for this dataset, as indicated by the larger Pr(>F) than our significance level.
+
+

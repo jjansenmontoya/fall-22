@@ -1,0 +1,207 @@
+---
+title: "HW6 Math158"
+author: "Joshua Jansen-Montoya"
+date: '2022-10-13'
+output: pdf_document
+---
+
+## Problem 7.3
+Using the divusa data:
+1. Fit a regression model with divorce as the response and unemployed, femlab, marriage, birth and military as predictors. Compute the condition numbers and interpret their meanings.
+2. For the same model, compute the VIFs. Is there evidence that collinearity causes some predictors not to be significant? Explain.
+3. Does the removal of insignificant predictors from the model reduce the collinearity? Investigate.
+
+## Answer 7.3 
+1. We can fit the regression model as follows,
+```{r 7.3a}
+  library(faraway)
+  lmod <- lm(divorce ~ unemployed + femlab + marriage + birth + military, data = divusa)
+  x <- model.matrix(lmod)[,-1]
+  e <- eigen(t(x) %*% x)
+  sqrt(e$val[1]/e$val)
+```
+Looking at these results, we can see that we have non-zero condition numbers, as well as some large condition numbers which would indicate a high level of collinearity in our model.
+2. Using the same values, we can compute the VIFs as follows,
+```{r 7.3b}
+  library(faraway)
+  lmod <- lm(divorce ~ unemployed + femlab + marriage + birth + military, data = divusa)
+  require(faraway)
+  x <- model.matrix(lmod)[,-1]
+  vif(x)
+```
+We can note that we do not have any VIF's greater than 5 or 6 whihc indicates that we may not have the collinearity that we thought that we had.
+3. We can look at the summary of our model as follows,
+```{r 7.3c1}
+  library(faraway)
+  lmod <- lm(divorce ~ unemployed + femlab + marriage + birth + military, data = divusa)
+  summary(lmod)
+```
+Using these results, we can remove unemployed and military from our model, from which we will recalculate our condition numbers and our VIFs as desired,
+```{r 7.c2}
+  library(faraway)
+  lmod <- lm(divorce ~ femlab + marriage + birth, data = divusa)
+  require(faraway)
+  x <- model.matrix(lmod)[,-1]
+  vif(x)
+  e <- eigen(t(x) %*% x)
+  sqrt(e$val[1]/e$val)
+```
+We can note that we have reduced the VIF values of the model, and that we have done away with our high condition numbers which indicates that the removal of the insignificant predictors from the model does remove the collinearity to some degree.
+
+## Problem 7.4
+For the longley data, fit a model with Employed as the response and the other variables as predictors.
+1. Compute and comment on the condition numbers.
+2. Compute and comment on the correlations between the predictors.
+3. Compute the variance inflation factors.
+
+## Answer 7.4
+1. We can compute the condition numbers as follows,
+```{r 7.4a}
+  library(faraway)
+  lmod <- lm(Employed ~ GNP.deflator + GNP+ Unemployed + Armed.Forces + Population + Year, data = longley)
+  x <- model.matrix(lmod)[,-1]
+  e <- eigen(t(x) %*% x)
+  sqrt(e$val[1]/e$val)
+```
+After computing the condition numbers we can see that we seem to have a very high level of collinearity within our data set as indicated by such high condition numbers.
+2. We can compute the correlations between the predictors as follows,
+```{r 7.4b}
+  library(faraway)
+  lmod <- lm(Employed ~ GNP.deflator + GNP+ Unemployed + Armed.Forces + Population + Year, data = longley)
+  x <- model.matrix(lmod)[,-1]
+  round(cor(x[,1:6]),2)
+```
+Looking at our correlation matrix, we can see that there seems to be a high level of correlation between GNP.deflator with GNP, Population, and Year, as well as GNP with Population and Year, and Population with Year. These correlations could be the source of our collinearity or at least a high contributer.
+3. We can compute the variance inflation factors as follows, 
+```{r 7.4c}
+  library(faraway)
+  lmod <- lm(Employed ~ GNP.deflator + GNP+ Unemployed + Armed.Forces + Population + Year, data = longley)
+  require(faraway)
+  x <- model.matrix(lmod)[,-1]
+  vif(x)
+```
+We can see that we have very high VIF values for all of our variables except Armed.Forces which argees with our earlier calculations.
+## Problem 7.6
+Using the cheddar data, fit a linear model with taste as the response and the other three variables as predictors.
+1. Is the predictor Lactic statistically significant in this model?
+2. Give the R command to extract the p-value for the test of $\beta_{lactic} = 0$. Hint: look at summary()$coef.
+3. Add normally distributed errors to Lactic with mean zero and standard deviation 0.01 and refit the model. Now what is the p-value for the previous test?
+4. Repeat this same calculation of adding errors to Lactic 1000 times within for loop. Save the p-values into a vector. Report on the average p-value. Does this much measurement error make a qualitative difference to the conclusions?
+5. Repeat the previous question but with a standard deviation of 0.1. Does this much measurement error make an important difference?
+
+## Answer 7.6
+1. Looking at the following linear mode, we can see that,
+```{r 7.6a}
+  library(faraway)
+  lmod <- lm(taste ~ Acetic + H2S + Lactic, data = cheddar)
+  summary(lmod)
+```
+We can see that Lactic is significant to a 0.05% level as desired.
+2. We can find the $p$ value relating to the $\beta_{lactic} = 0$ as follows,
+```{r 7.6b}
+  library(faraway)
+  lmod <- lm(taste ~ Acetic + H2S + Lactic, data = cheddar)
+  summary(lmod)$coef
+```
+is 0.0311.
+3. Now, we can add normally distributed error to Lactic with mean 0 and STDev 0.01 and refit the model as follows,
+```{r 7.6c}
+  library(faraway)
+  lmod <- lm(taste ~ Acetic + H2S + I(Lactic + rnorm(length(Lactic), 0, 0.01)), data = cheddar)
+  summary(lmod)$coef
+  summary(lmod)$coef[4, 4]
+```
+We can see that in this instance, we obtian an estimated $p$ value of 0.0326, which is very close to our original value.
+4. Repeating this 1000 times and taking the average, we find that the average is,
+```{r 7.6d}
+  library(faraway)
+  vec = vector(,1000)
+  for (i in 1:1000) {
+    lmod <- lm(taste ~ Acetic + H2S + I(Lactic + rnorm(length(Lactic), 0, 0.01)), data = cheddar)
+    vec[i] =  summary(lmod)$coef[4, 4]
+  }
+  x <- mean(vec[i])
+  x
+```
+The mean value we obtain is 0.0332 which is consistent with what we found earlier.
+5. Repeating the before mentioned experiment with a STDev of 
+```{r 7.6e}
+  library(faraway)
+  vec = vector(,1000)
+  for (i in 1:1000) {
+    lmod <- lm(taste ~ Acetic + H2S + I(Lactic + rnorm(length(Lactic), 0, 0.1)), data = cheddar)
+    vec[i] =  summary(lmod)$coef[4, 4]
+  }
+  x <- mean(vec[i])
+  x
+```
+We can note that using the rnorm with 0.1, then it follows that our mean $p$ value changes greatly, with more than doubling. So yes, the measurement error does make a difference.
+## Problem 7.8
+Use the fat data, fitting the model described in Section 4.2.
+1. Compute the condition numbers and variance inflation factors. Comment on the degree of collinearity observed in the data.
+2. Cases 39 and 42 are unusual. Refit the model without these two cases and recompute the collinearity diagnostics. Comment on the differences observed from the full data fit.
+3. Fit a model with brozekas the response and just age, weight and height as predictors. Compute the collinearity diagnostics and compare to the full data fit.
+4. Compute a 95% prediction interval for brozek for the median values of age, weight and height.
+5. Compute a 95% prediction interval for brozek for age=40, weight=200 and height=73. How does the interval compare to the previous prediction?
+6. Compute a 95% prediction interval for brozek for age=40, weight=130 and height=73. Are the values of predictors unusual? Comment on how the inter- val compares to the previous two answers.
+## Answer 7.8
+1. We can calculate the VIF and condition numbers for the mentioned model as follows,
+```{r 7.8a}
+  library(faraway)
+  lmod <- lm(brozek ~ age + weight + height + neck + chest + abdom + hip + thigh + knee + ankle + biceps + forearm + wrist, data=fat)
+  x <- model.matrix(lmod)[,-1]
+  e <- eigen(t(x) %*% x)
+  sqrt(e$val[1]/e$val)
+  require(faraway)
+  vif(x)
+```
+Looking at our values, we can see that there seems to appear to be a high level of collinearity within our dataset.
+2. Refitting the model without cases 39 and 42, we can see that we obtain,
+```{r 7.8b}
+  library(faraway)
+  fatRemoved <- fat[-c(39, 42), ]
+  lmod <- lm(brozek ~ age + weight + height + neck + chest + abdom + hip + thigh + knee + ankle + biceps + forearm + wrist, data=fatRemoved)
+  x <- model.matrix(lmod)[,-1]
+  e <- eigen(t(x) %*% x)
+  sqrt(e$val[1]/e$val)
+  require(faraway)
+  vif(x)
+```
+Removing these values, we can see that there is a very small change in our calculated values for VIF and for our condition numbers, indicating that removing these values does not have a strong effect on the model.
+3. Fitting the reduced version of the model, we can see that we obtain,
+```{r 7.8c}
+  library(faraway)
+  lmod <- lm(brozek ~ age + weight + height, data=fat)
+  x <- model.matrix(lmod)[,-1]
+  e <- eigen(t(x) %*% x)
+  sqrt(e$val[1]/e$val)
+  require(faraway)
+  vif(x)
+
+```
+We can note that looking at these values, we have much lower values of collinearity, as indicated by our VIFs as well as significantly lower values for our condition numbers. This indicates that this model has a lower level of collinearity as desired.
+4. We can calculate the 95% confidence interval for our reduced model as follows,
+```{r 7.8d}
+  library(faraway)
+  medAge = median(fat$age)
+  medWeight = median(fat$weight)
+  medHeight = median(fat$height)
+  lmod <- lm(brozek ~ age + weight + height, data=fat)
+  predict(lmod, data.frame(age = medAge, weight = medWeight, height = medHeight), interval="predict", level = 0.95) 
+```
+5. Now caculating the 95% confidence interval for our reduced model with the new values, we obtain,
+```{r 7.8e}
+  predict(lmod, data.frame(age = 40, weight = 200, height = 73), interval="predict", level = 0.95)
+```
+We can note that the CI is more wide in this instance but not by a significant margin (within about 0.1 of each other).
+6. Now caculating the 95% confidence interval for our reduced model with the new values, we obtain,
+```{r 7.8f}
+  predict(lmod, data.frame(age = 40, weight = 130, height = 73), interval="predict", level = 0.95)
+```
+These results do not really make sense, since it is impossible to have a negative amount of body fat. Thus, while the other two intervals seem like they could be reasonable, this interval does not make physical sense.
+
+
+
+
+
+
