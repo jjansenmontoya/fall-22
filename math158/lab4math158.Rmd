@@ -1,0 +1,110 @@
+---
+title: "lab4math158"
+author: "Joshua Jansen-Montoya"
+date: '2022-10-25'
+output: pdf_document
+---
+
+```{r loading dataset}
+  potato <- read.table("potato", header=T)
+  plot(potato)
+  qqnorm(potato$weight)
+  qqline(potato$weight)
+  qqnorm(potato$length)
+  qqline(potato$length)
+  qqnorm(potato$breadth)
+  qqline(potato$breadth)
+  shapiro.test(potato$weight)
+  shapiro.test(potato$length)
+  shapiro.test(potato$breadth)
+```
+Looking at these plots, it appears that there exists linear relationships between each of our variables, and thus, it would make sense that a linear model could be used to summarize these relationships. Similarly, going off of our Shapiro-Wilks test and from our qqnorm plots, we can see that each of our columns in our data set are normal and thus sufficiently meet the pre-requisite for our linear models.
+Now, we can use the models as follows,
+```{r locally linear plot}
+  plot(potato$length,potato$weight)
+  lines(ksmooth(potato$length,potato$weight,"normal",bandwidth=12),lty=2,lwd=2,col="orange")
+  mm <-loess(potato$weight~ potato$length,span=0.55,degree=1)
+  lines(sort(potato$length),mm$fit[sort.list(potato$length)],col="blue")
+  mm <-lm(weight ~ length,data=potato)
+  lines(potato$length,mm$fit,col="red")
+```
+For the bandwidth, we chose the value bandwidth = 12 since it provided a moderately linear fit along with demonstrating some of the non-linear movements to the data. We felt that this most accurately reflected the trends in our data. Similarly with the span = 0.55, we felt that this choice also did well to show that the data was not perfectly linear, but that it would trend well with a linear model fit. This makes us more confident about moving onto linear models for weight as a functin of length and a function of breadth since we were able to find numbers for span and breadth that would mimic those of a linear function that were not choices that would otherwise force a linear shape to our data. Thus, we can see that there is a an underlying linear structure. This may have been an unnecessary data transformation since we could also see the underlying linear structure through the linear model and by inspecting the $R^2$ value.
+## Ordinary Least Squares
+Now, we can solve our OLS by hand as follows,
+```{r ols solving}
+  X <-cbind(1,potato$length,potato$breadth)
+  dim(X)
+  coeff <-solve(t(X)%*%X)%*%(t(X)%*%potato$weight)
+  coeff
+  lmod <- lm(weight ~ length + breadth, data = potato)
+  summary(lmod)
+  diagonals = diag(X)
+  diagonals
+```
+We can see that the coefficients for both of our methods of calculation agree with one another. Looking at our diagonals, we can see that we obtain square rooted value of 1, $\sqrt{52}$, and $\sqrt{47}$. We can note that these are not the same as what we had found in our linear model. The off-diagonal elements represent the covariance in our model.
+
+## Colinearity
+Using the given code, we can see,
+```{r colinearity}
+  coefmat <-matrix(0,100,3)
+  sdcoefmat <-matrix(0,100,3)
+  # to record the 3 set of coefficient estimates of
+  # model 1 (1 coefficient) and model 2 (2 coefficients).
+  for (kk in (1:100)) {
+  newerror <-rnorm(18,sd=10)
+  mod1 <-summary(lm(potato$weight+newerror ~ potato$length))
+  mod2 <-summary(lm(potato$weight+newerror ~ potato$length+potato$breadth))
+  coefmat[kk,1] <-mod1$coef[2,1]
+  coefmat[kk,2:3] <-mod2$coef[2:3,1]
+  sdcoefmat[kk,1] <-mod1$coef[2,2]
+  sdcoefmat[kk,2:3] <-mod2$coef[2:3,2] }
+  # a boxplot of the standard errors for the model coefficients in model 1 and
+  # 2 respectively
+  boxplot(as.data.frame(sdcoefmat), names=c("mod1", "mod2 -length", "mod2
+  -breadth"))
+  # Relationship between model coefficients "length" and "breadth" in model 2.
+  plot(coefmat[,2],coefmat[,3])
+  # Boxplots of the coefficients in model 1, model 2 (length and breadth), and
+  # the sum of the 2 coefficients in model 2.
+  boxplot(as.data.frame(cbind(coefmat,coefmat[,2]+coefmat[,3])))
+```
+Thus, we can see that there appears to be collinearity between the two coefficients as indicated by the scatter plot, but that there does not seem to be major overlap between the coefficients we generated across our models.
+## Leverage
+We can identify the points with high leverage using the following code,
+```{r leverage points}
+  influence <- lm.influence(lmod, do.coef = TRUE)
+  ?lm.influence
+  boxplot(influence$hat)
+  influence$hat > 2*mean(influence$hat)
+  boxplot(influence$sigma)
+  influence$sigma[abs(influence$sigma) > 2]
+```
+Looking at the hat values, we can see that observations 13, 14, 24, 25, 26, and 27 are all points that have high leverage, that we do not seem to have any outliers that correspond to residual standard deviations of greater than 2, and because of this, we do not have any influential points. Now, removing the observations we found to have high leverage, we obtain that,
+```{r removing high leverage points}
+  reducedPotato <- potato[-c(13, 14, 24, 25, 26, 27), ] 
+  reducedPotatoMod <- lm(weight ~ length + breadth, data = reducedPotato)
+  summary(reducedPotatoMod)
+```
+We can see that we obtain a slightly better $R^2$, and similarly, that our coefficients change by $\approx 0.2$, and that we lose a level of significance for our length predictor variable, but that the Intercept and breadth remain highly significant to the overall model.
+
+## Testing
+Now, we can construct the 95% CI on our original model as follows,
+```{r 95% CI}
+  confint(lmod, level=0.95)
+```
+Looking at our confidence intervals, we can see that it appears that if we were to drop one of our predictors, it would be length since it contributes less to our overall model. Doing so, we can compare a reduced model with our main model as follows,
+```{r anova}
+  reducedMod <- lm(weight ~ breadth, data = reducedPotato)
+  anova(reducedMod, reducedPotatoMod)
+```
+Looking at our results, we can see that as we have a Pr(>F) of less than 0.05, we can conclude that our reduced model is a better fit and that therefore, we can use our reduced model that does not include breadth as a predictor variable.
+
+## Summary
+From the our statistical analysis of the potato dataset, we were able to find that collinearity was a problem within our the predictor variables within our dataset from which, we were able to analyze our data set further through using anova and different linear models to conclude that we could use a reduced model using just breadth as a predictor variables instead of the full model. We were also able to find that we could indeed use a linear model, as the requirements for a linear model that we needed were met by all parts of our data set including normality as shown by the Shapiro-Wilks test. We were also able to note that there were a couple of points of high leverage that after removing, we were able to construct a better fitting linear model. We did not find any clear violations of our assumptions for the linear model and thus, we trust in our results from the linear model. 
+
+
+
+
+
+
+
