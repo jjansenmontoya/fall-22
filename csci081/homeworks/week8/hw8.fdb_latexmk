@@ -1,7 +1,7 @@
 # Fdb version 3
-["pdflatex"] 1668226626 "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week8/hw8.tex" "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week8/hw8.pdf" "hw8" 1668226628
-  "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week8/hw8.aux" 1668226628 1122 522ed4d92b88dc687706fd6346318fd3 ""
-  "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week8/hw8.tex" 1668226625 4068 4b2473d5fac7ac217dd2dd5b0326cd29 ""
+["pdflatex"] 1668534479 "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week8/hw8.tex" "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week8/hw8.pdf" "hw8" 1668534522
+  "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week8/hw8.aux" 1668534482 1340 df2695a2c150ea4b0846e21b7b9e7701 ""
+  "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week8/hw8.tex" 1668534520 4266 ac13a6db26ef95a3173a6e543b2d39a3 ""
   "/usr/local/texlive/2021/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -152,15 +152,16 @@
   "/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1616695603 5169178 a2ce6e2d73f603b690db6777d06dbccb ""
   "/usr/local/texlive/2021/texmf-var/web2c/pdftex/pdflatex.fmt" 1646876308 2724737 ddac71e5e91da4b699a14b2c227608a9 ""
   "/usr/local/texlive/2021/texmf.cnf" 1616695596 577 4c1911a7228e554c6032256d3cf5567d ""
-  "hw8.aux" 1668226628 1122 522ed4d92b88dc687706fd6346318fd3 "pdflatex"
-  "hw8.out" 1668226627 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "hw8.tex" 1668226625 4068 4b2473d5fac7ac217dd2dd5b0326cd29 ""
+  "hw8.aux" 1668534482 1340 df2695a2c150ea4b0846e21b7b9e7701 "pdflatex"
+  "hw8.out" 1668534481 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "hw8.tex" 1668534520 4266 ac13a6db26ef95a3173a6e543b2d39a3 ""
   "hw8ss1.png" 1668226116 270849 a67a843c00d186f1377a5530109461bd ""
   "hw8ss2.png" 1668226252 301270 9ff30b6c4bab1f56f5e51319bc979f5a ""
+  "hw8ss3.png" 1668534385 340363 0cb2eef09e38498881137dbb457a7762 ""
   (generated)
-  "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week8/hw8.log"
-  "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week8/hw8.pdf"
   "hw8.aux"
   "hw8.pdf"
-  "hw8.out"
+  "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week8/hw8.pdf"
   "hw8.log"
+  "hw8.out"
+  "/Users/jrjm/Desktop/fall 22/csci081/homeworks/week8/hw8.log"
