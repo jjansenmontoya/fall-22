@@ -1,0 +1,203 @@
+---
+title: 'Lab 5: Math158'
+author: "Joshua Jansen-Montoya"
+date: '2022-11-22'
+output: pdf_document
+---
+
+### Problem 9.3
+Using the ozone data, fit a model with O3 as the response and temp, humidity and ibh as predictors. Use the Box–Cox method to determine the best transformation on the response.
+
+### Answer 9.3
+First, we can fit our model as follows,
+```{r 9.3 initial fitting}
+  library(faraway)
+  lmod <- lm(O3 ~ temp + humidity + ibh, data = ozone)
+  summary(lmod)
+```
+Which we can see does not have a great $R^2$ value and thus, we can attempt a boxcox transformation as follows,
+```{r 9.3 boxcox tranformation}
+  require(MASS)
+  bc <- boxcox(lmod)
+  bc$x[which.max(bc$y)]
+```
+Which we can see gives us a $\lambda = 0.25$. Thus, refitting our model wiht this transformation, we obtain that
+```{r 9.3 boxcox application}
+  lmod <- lm(O3^(0.25) ~ temp + humidity + ibh, data = ozone)
+  summary(lmod)
+```
+Which we can see improves our $R^2$ as well as the significance for each of our predictor variables.
+
+### Problem 9.4
+Use the pressure data to fit a model with pressure as the response and temperature as the predictor using transformations to obtain a good fit.
+
+### Answer 9.4
+First, we can fit our model as follows,
+```{r 9.4 initial fitting}
+  library(faraway)
+  lmod <- lm(pressure~ temperature, data = pressure)
+  summary(lmod)
+```
+Which we can see does not have a great $R^2$ value and thus, we can attempt a boxcox transformation as follows,
+```{r 9.4 boxcox tranformation}
+  require(MASS)
+  bc <- boxcox(lmod)
+  bc$x[which.max(bc$y)]
+```
+Thus, letting $\lambda = 0$, or in other words, using a log transformation on our response variable, we find that,
+```{r 9.4 applying box cox}
+  lmodBoxCox = lm(log(pressure)~temperature, data = pressure)
+  summary(lmodBoxCox)
+```
+WHich we can see gives us inmproved signficance for each of our predictor variables and reduces our $R^2$ and our residual standards error, giving us a better for our model.
+
+
+### Problem 9.5
+Use transformations to find a good model for volume in terms of girth and height using the trees data
+
+### Answer 9.5
+First, we can generate a non-transformed linear model for our data as follows,
+```{r 9.5 initial}
+  library(faraway)
+  ?trees
+  lmod <- lm(Volume ~ Girth + Height, data = trees)
+  summary(lmod)
+```
+Now, using this model, we can perform a box-cox transformation as follows,
+```{r 9.5 boxcox}
+  require(MASS)
+  bc <- boxcox(lmod)
+  bc$x[which.max(bc$y)]
+```
+Which gives us a $\lambda = 0.303$. 
+Thus, applying this tranformation onto our response variable, we obtain that,
+```{r 9.5 boxcox application}
+  lmod <- lm(Volume^{0.303} ~ Girth + Height, data = trees)
+  summary(lmod)
+```
+Which we can see improves our $R^2$.
+
+
+### Problem 10.1
+Use the prostate data with lpsa as the response and the other variables as predictors. Implement the following variable selection methods to determine the “best” model:
+1. Backward Elimination
+2. AIC
+3. Adjusted $R^2$
+4. Mallows $C_p$
+### Answer 10.1
+1. First, focusing on backward elimination, we can perform this variable selection method for our "best" model as follows,
+```{r backward elimination 1}
+  library(faraway)
+  lmod <- lm(lpsa ~ lcavol + lweight + age + lbph + svi + lcp + gleason + pgg45 + lpsa, data = prostate)
+  summary(lmod)
+```
+Thus, as gleason is th least significant predictor, we can thus remove it from our model. Doing so, we now obtain,
+```{r backward elimination 2}
+  lmod <- lm(lpsa ~ lcavol + lweight + age + lbph + svi + lcp + pgg45 + lpsa, data = prostate)
+  summary(lmod)
+```
+Now, we can remove lcp from our predictors to obtain,
+```{r backward elimination 3}
+  lmod <- lm(lpsa ~ lcavol + lweight + age + lbph + svi + pgg45 + lpsa, data = prostate)
+  summary(lmod)
+```
+Now, we can remove pgg45 to obtain, 
+```{r backward4}
+  lmod <- lm(lpsa ~ lcavol + lweight + age + lbph + svi + lpsa, data = prostate)
+  summary(lmod)
+```
+Now, removing age, we obtain,
+```{r backward5}
+  lmod <- lm(lpsa ~ lcavol + lweight + lbph + svi + lpsa, data = prostate)
+  summary(lmod)
+```
+From which, we can remove lbph to obtain, 
+```{r backward6}
+  lmod <- lm(lpsa ~ lcavol + lweight + svi + lpsa, data = prostate)
+  summary(lmod)
+```
+Which gives us all of our desired significance levels for our predictor variables.
+
+2. Now, performing the AIC method of searching for different predictor variables, we obtain that,
+```{r AIC1 }
+  require(leaps)
+  b <- regsubsets(lpsa~.,data=prostate)
+  rs <- summary(b)
+  rs$which
+```
+Which tells us that lcavol is our most significant predictor. Now, we can find what number of predictors we want as follows,
+```{r AIC2}
+  AIC <- 50*log(rs$rss/50) + (2:9)*2
+  plot(AIC ~ I(1:8), ylab="AIC", xlab="Number of Predictors")
+```
+Wwhich we can see that our best number of predictors is 2, and thus, our best set of predictor variables is lcavol, lweight, and svi which agrees with out backwards elimination method.
+
+3. Now, focusing on the $R^2$ statistic, we can see that we obtain,
+```{r R2 selection 10.5}
+  plot(1:8,rs$adjr2,xlab="No. of Parameters",ylab="Adjusted R-square")
+  which.max(rs$adjr2)
+```
+Which we can see that our 7 parameter model gives us the highest adjusted $R^2$, which is the set of predictor variables of all remaining variables without gleason.
+
+4. Now, focusing on the $C_p$ criterion for model selection, we can find our best model as follows,
+```{r cp selection}
+  plot(1:8,rs$cp,xlab="No. of Parameters",ylab="Cp Statistic")
+  abline(0,1)
+```
+From which, we can see that our set of 7 predictors is the best for our criteria, and thus, we will select the set, lcavol, lweight, age, lbph, svi, lcph, and pgg45.
+
+### Problem 10.3
+Using the divusa data set with divorce as the response and the other variables as predictors, repeat the work of the first question.
+
+### Answer 10.3
+1. Beginning with backward elimination, we will begin with our set of all predictors as follows,
+```{r 10.3 backward elimination 1}
+  library(faraway)
+  ?divusa
+  lmod <- lm(divorce ~ year + unemployed + femlab + marriage + birth + military, data = divusa)
+  summary(lmod)
+```
+Now, we can removed unemployed from our predictor variables to obtain,
+```{r 10.3 backward elimination 2}
+  lmod <- lm(divorce ~ year + femlab + marriage + birth + military, data = divusa)
+  summary(lmod)
+```
+At this point, our set of predictor variables appear to all be relevant, and thus, we can say that the best set of predictor variables for our model appears to be year, femlab, marriage, birth, and military.
+
+2. Now, performing the AIC method of searching for different predictor variables, we obtain that,
+```{r 10.3 AIC1 }
+  require(leaps)
+  b <- regsubsets(divorce~.,data=divusa)
+  rs <- summary(b)
+  rs$which
+```
+Which tells us that femlab is our most significant predictor. Now, we can find what number of predictors we want as follows,
+```{r 10. 3AIC2}
+  AIC <- 50*log(rs$rss/50) + (2:7)*2
+  plot(AIC ~ I(1:6), ylab="AIC", xlab="Number of Predictors")
+```
+From which we can see that our best model in terms of AIC is our set of 5 predictors, or the set year, femlab, marriage, birth, and military.
+
+3. Now, we can use our adjusted $R^2$ statistic to determine our best model as follows,
+Now, focusing on the $R^2$ statistic, we can see that we obtain,
+```{r R2 selection}
+  plot(1:6,rs$adjr2,xlab="No. of Parameters",ylab="Adjusted R-square")
+  which.max(rs$adjr2)
+```
+From which we can see that our best model in terms of adjusted $R^2$ is our set of 5 predictors, or the set year, femlab, marriage, birth, and military.
+
+4. Now focusing on $C_p$, we can see that we obtain,
+```{r 10.3 cp selection}
+  plot(1:6,rs$cp,xlab="No. of Parameters",ylab="Cp Statistic")
+  abline(0,1)
+```
+Which as both 5 and 6 are along the line, we will defer for 5 and thus use the set of predictor variables: year, femlab, marriage, birth, and military.
+
+
+
+
+
+
+
+
+

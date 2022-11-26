@@ -1,0 +1,75 @@
+---
+title: "First Draft of Outputs"
+author: "Joshua Jansen-Montoya"
+date: '2022-11-26'
+output: pdf_document
+---
+
+### Data Transformation
+Transforming the different columns in our data set to more useful numeric metrics:
+Mapping each tweet to the number of characters in each tweet
+```{r text -> text length}
+  textLength <- vector(length=length(ElonTweets_Sentiment_10_28_22$Text))
+  for (x in 1:length(ElonTweets_Sentiment_10_28_22$Text)) {
+  textLength[x] = nchar(ElonTweets_Sentiment_10_28_22$Text[x])
+  }
+```
+Mapping user name to 1 if Elon, 0 if not, location to 1 if TwitterHQ 0 if not, verified to 1 if verified, 0 if not, mentions to 1 if someone is mentioned, 0 if not
+```{r user name -> 0 1}
+  mentions <- ifelse(ElonTweets_Sentiment_10_28_22$mentions == "_", 0, 1)
+  userName <- ifelse(ElonTweets_Sentiment_10_28_22$Username == "elonmusk", 1, 0)
+  location <- ifelse(ElonTweets_Sentiment_10_28_22$location == "Twitter HQ", 1, 0)
+  verified <- ifelse(ElonTweets_Sentiment_10_28_22$verified == TRUE, 1, 0)
+```
+Now, looking at the distribution of the different languages of Elon's Tweets, we can designate a general number for all languages that occur more than 50 times (since "en" occurs 15008 times) according to "en": 1, "de": 2, "fr": 3, "qam": 4, "qme": 5, "tl": 6, "und": 7, "zxx": 8, other: 0, giving us,
+```{r language -> numeric}
+  language <- ifelse(ElonTweets_Sentiment_10_28_22$language == "en", 1, ifelse(ElonTweets_Sentiment_10_28_22$language == "de", 2, ifelse(ElonTweets_Sentiment_10_28_22$language == "fr", 3, ifelse(ElonTweets_Sentiment_10_28_22$language == "qam", 4, ifelse(ElonTweets_Sentiment_10_28_22$language == "qme", 5, ifelse(ElonTweets_Sentiment_10_28_22$language == "tl", 6, ifelse(ElonTweets_Sentiment_10_28_22$language == "und", 7, ifelse(ElonTweets_Sentiment_10_28_22$language == "zxx", 8, 0))))))))
+```
+Now to find the time between Elons first tweet ("2010-06-04") and each of his tweets, map each date to the time since,
+```{r date -> time since first tweet}
+  timeSinceFirstTweet <- as.Date(as.character(ElonTweets_Sentiment_10_28_22$Date), format="%Y-%m-%d")-
+                  as.Date(as.character("2010-06-04"), format="%Y-%m-%d")
+  timeSinceFirstTweet<-as.numeric(timeSinceFirstTweet)
+```
+Now mapping the different Twitter access points Elon has for Instagram: 1, iPhone: 2, Web App: 3, Web Client: 4, other: 0.
+```{r access point -> numeric}
+  accessPoint <- ifelse(ElonTweets_Sentiment_10_28_22$`Twitter Access Point` == "Instagram", 1, ifelse(ElonTweets_Sentiment_10_28_22$`Twitter Access Point`== "Twitter for iPhone", 2, ifelse(ElonTweets_Sentiment_10_28_22$`Twitter Access Point`== "Twitter Web App", 3, ifelse(ElonTweets_Sentiment_10_28_22$`Twitter Access Point` == "Twitter Web Client", 4, 0))))
+```
+Now, we can make a mapping from our sentiments output to a number scale from -100 to 200 where -100 - 0 are designated for negative sentiments (-100 being most extreme) 0-100 for neutrality (0 being most neutral), 100-200 being positive (200 being most positive), we do that as follows,
+```{r sentiment -> numeric}
+  sentiments <- vector(length=length(ElonTweets_Sentiment_10_28_22$sentiment))
+  substring(ElonTweets_Sentiment_10_28_22$sentiment[2], 15, 23)
+  for (x in 1:length(ElonTweets_Sentiment_10_28_22$sentiment)) {
+    if (substring(ElonTweets_Sentiment_10_28_22$sentiment[x], 3, 5) == "pos") {
+      as.numeric(substring(ElonTweets_Sentiment_10_28_22$sentiment[x], 15, 23))
+    }
+  }
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
