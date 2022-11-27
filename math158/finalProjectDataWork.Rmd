@@ -38,22 +38,71 @@ Now mapping the different Twitter access points Elon has for Instagram: 1, iPhon
 Now, we can make a mapping from our sentiments output to a number scale from -100 to 200 where -100 - 0 are designated for negative sentiments (-100 being most extreme) 0-100 for neutrality (0 being most neutral), 100-200 being positive (200 being most positive), we do that as follows,
 ```{r sentiment -> numeric}
   sentiments <- vector(length=length(ElonTweets_Sentiment_10_28_22$sentiment))
-  substring(ElonTweets_Sentiment_10_28_22$sentiment[2], 15, 23)
   for (x in 1:length(ElonTweets_Sentiment_10_28_22$sentiment)) {
     if (substring(ElonTweets_Sentiment_10_28_22$sentiment[x], 3, 5) == "pos") {
-      as.numeric(substring(ElonTweets_Sentiment_10_28_22$sentiment[x], 15, 23))
-    }
+      sentiments[x] = suppressWarnings(as.numeric(substring(ElonTweets_Sentiment_10_28_22$sentiment[x], 13, 21)))*100 + 100
+    } else if (substring(ElonTweets_Sentiment_10_28_22$sentiment[x], 3, 5) == "neu") {
+     sentiments[x] = 100- 100*suppressWarnings(as.numeric(substring(ElonTweets_Sentiment_10_28_22$sentiment[x], 13, 21)))
+   } else {
+     sentiments[x] = -1* 100 * suppressWarnings(as.numeric(substring(ElonTweets_Sentiment_10_28_22$sentiment[x], 13, 21)))
+  }
   }
 ```
+Now rebinding all of our variables of interest into a new data frame to be used for our experiments,
+```{r new data frame}
+  tweetId <- ElonTweets_Sentiment_10_28_22$`Tweet Id`
+  replyCount <- ElonTweets_Sentiment_10_28_22$`reply count`
+  retweetCount <- ElonTweets_Sentiment_10_28_22$`retweet count` 
+  likeCount <- ElonTweets_Sentiment_10_28_22$`like count`
+  friendCount <- ElonTweets_Sentiment_10_28_22$`Friends Count`
+  followerCount <- ElonTweets_Sentiment_10_28_22$`Follower Count`
+  df <- data.frame(tweetId , replyCount , retweetCount , likeCount , friendCount , followerCount , sentiments , accessPoint , textLength , mentions , location , verified , userName)
+  df <- na.omit(df)
+  df
+```
+Generating an initial linear model to answer our question of how likeCount is affected by the other variables, we obtain that,
+```{r intial linear model}
+  lmod <- lm(likeCount ~ tweetId + replyCount + retweetCount + friendCount + followerCount + sentiments + accessPoint + textLength + mentions + location + verified + userName, data = df)
+summary(lmod)
+```
+Looking at intial results, appears that we need to drop location, verified, userName, and friendCount from our predictor variables. Doing so,
+```{r lmod dropping variables}
+   lmod <- lm(likeCount ~ tweetId + replyCount + retweetCount + followerCount + sentiments + accessPoint + textLength + mentions, data = df)
+  summary(lmod)
+```
+Now, we can apply our step function as follows,
+```{r step function}
+  step(lmod)
+```
+giving us the following linear model,
+```{r post-step function linear model}
+  lmod <- lm(likeCount ~ tweetId + replyCount + retweetCount + sentiments + accessPoint + textLength + mentions, data = df)
+  summary(lmod)
+```
+All appear to be significant predictor variables for our model. Can now apply boxcox to our model to check if we need a transformation
+```{r boxcox transformation}
+  bc <- boxcox(lmod)
+```
+Now to calculate the condition numbers and VIF for our model,
+```{r VIF & condition numbers}
+  vif(lmod)
+  x <- model.matrix(lmod)[,-1]
+  e <- eigen(t(x), %*%, x)
+  sqrt(e$val[1]/e$val)
+```
 
-
-
-
-
-
-
-
-
+Now, can check our model to see if our variables meet our assumptions. First checking for normality of our variables, will check with sample of 
+```{r checking normality assumptions}
+  shapiro.test(sample(tweetId, 5000, replace = FALSE, prob = NULL))
+  shapiro.test(sample(replyCount, 5000, replace = FALSE, prob = NULL))
+  shapiro.test(sample(retweetCount, 5000, replace = FALSE, prob = NULL))
+  shapiro.test(sample(sentiments, 5000, replace = FALSE, prob = NULL))
+  shapiro.test(sample(accessPoint, 5000, replace = FALSE, prob = NULL))
+  shapiro.test(sample(textLength, 5000, replace = FALSE, prob = NULL))
+  shapiro.test(sample(mentions, 5000, replace = FALSE, prob = NULL))
+  shapiro.test(sample(likeCount, 5000, replace = FALSE, prob = NULL))
+```
+We can see that for each of our random samples, it appears that our variable distributions are not normal and thus, some of our assumptions for our model are not met.
 
 
 
