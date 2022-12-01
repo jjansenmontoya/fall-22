@@ -58,39 +58,57 @@ Now rebinding all of our variables of interest into a new data frame to be used 
   followerCount <- ElonTweets_Sentiment_10_28_22$`Follower Count`
   df <- data.frame(tweetId , replyCount , retweetCount , likeCount , friendCount , followerCount , sentiments , accessPoint , textLength , mentions , location , verified , userName)
   df <- na.omit(df)
-  df
+  dfTrain <- df[-seq(1., NROW(df), by = 17),]
+  dfPredict <- df[seq(1., NROW(df), by = 17),]
 ```
 Generating an initial linear model to answer our question of how likeCount is affected by the other variables, we obtain that,
 ```{r intial linear model}
-  lmod <- lm(likeCount ~ tweetId + replyCount + retweetCount + friendCount + followerCount + sentiments + accessPoint + textLength + mentions + location + verified + userName, data = df)
+  lmod <- lm(likeCount ~ tweetId + replyCount + retweetCount + friendCount + followerCount + sentiments + accessPoint + textLength + mentions + location + verified + userName, data = dfTrain)
 summary(lmod)
 ```
 Looking at intial results, appears that we need to drop location, verified, userName, and friendCount from our predictor variables. Doing so,
 ```{r lmod dropping variables}
-   lmod <- lm(likeCount ~ tweetId + replyCount + retweetCount + followerCount + sentiments + accessPoint + textLength + mentions, data = df)
-  summary(lmod)
+   lmod1 <- lm(likeCount ~ tweetId + replyCount + retweetCount + followerCount + sentiments + accessPoint + textLength + mentions, data = dfTrain)
+  summary(lmod1)
 ```
 Now, we can apply our step function as follows,
 ```{r step function}
-  step(lmod)
+  step(lmod1)
 ```
 giving us the following linear model,
-```{r post-step function linear model}
-  lmod <- lm(likeCount ~ tweetId + replyCount + retweetCount + sentiments + accessPoint + textLength + mentions, data = df)
-  summary(lmod)
+```{r lmod creation for our data points}
+  lmod<-lm(likeCount ~ tweetId + replyCount + retweetCount + followerCount + sentiments + accessPoint + textLength + mentions, data = dfTrain)
 ```
-All appear to be significant predictor variables for our model. Can now apply boxcox to our model to check if we need a transformation
-```{r boxcox transformation}
-  bc <- boxcox(lmod)
+Now to attempt transformations
+```{r log transformation}
+  lmodLog <- lm(log(likeCount) ~ tweetId + replyCount + retweetCount + followerCount + sentiments + accessPoint + textLength + mentions, data = dfTrain)
+  summary(lmodLog)
 ```
+Gives us a worse $R^2$.
+```{r square root transformation}
+  lmodSqrt <- lm(sqrt(likeCount) ~ tweetId + replyCount + retweetCount + followerCount + sentiments + accessPoint + textLength + mentions, data = dfTrain)
+  summary(lmodSqrt)
+```
+ALso reduces our $R^2$. Trying 1/sqrt,
+```{r neg 1/sqrt transformation}
+  lmodNegSqrt <- lm(likeCount^(-1/2) ~ tweetId + replyCount + retweetCount + followerCount + sentiments + accessPoint + textLength + mentions, data = dfTrain)
+  summary(lmodNegSqrt)
+```
+Worse $R^2$. Trying rational,
+```{r rational transformation}
+  lmodRat <- lm(1/likeCount ~ tweetId + replyCount + retweetCount + followerCount + sentiments + accessPoint + textLength + mentions, data = dfTrain)
+  summary(lmodRat)
+```
+Significantly worse $R^2$ none had better $R^2$ not better significance.
+no transformation should be good.
 Now to calculate the condition numbers and VIF for our model,
 ```{r VIF & condition numbers}
   vif(lmod)
   x <- model.matrix(lmod)[,-1]
-  e <- eigen(t(x), %*%, x)
+  e <- eigen(t(x) %*% x)
   sqrt(e$val[1]/e$val)
 ```
-
+Our vif numbers indicate little  collinearity between our different predictor variables, but we can see that our condition numbers are super high because of the fact that it appears that although all of our variables are highly significant, some are far more significant than others, e.g. accessPoint vs. TweetID.
 Now, can check our model to see if our variables meet our assumptions. First checking for normality of our variables, will check with sample of 
 ```{r checking normality assumptions}
   shapiro.test(sample(tweetId, 5000, replace = FALSE, prob = NULL))
@@ -102,12 +120,35 @@ Now, can check our model to see if our variables meet our assumptions. First che
   shapiro.test(sample(mentions, 5000, replace = FALSE, prob = NULL))
   shapiro.test(sample(likeCount, 5000, replace = FALSE, prob = NULL))
 ```
-We can see that for each of our random samples, it appears that our variable distributions are not normal and thus, some of our assumptions for our model are not met.
+We can see that for each of our random samples, it appears that our variable distributions are not normal and thus, some of our assumptions for our model are not met. 
 
-
-
-
-
+Trying PLS, Partial Component, Robust to deal with non-normality of data.
+Doing the Least Trimmed Squares method,
+```{r lts method}
+  rmse <- function(x,y) sqrt(mean((x-y)^2))
+  ltsmod <- ltsreg(likeCount ~ tweetId + replyCount + retweetCount + followerCount + sentiments + accessPoint + textLength + mentions, data = dfTrain)
+  pred1 <- predict(ltsmod, dfPredict)
+  pred2 <- predict(lmod, dfPredict)
+  rmse(pred1, dfPredict$likeCount)
+  rmse(pred2, dfPredict$likeCount)
+```
+Notice some large distinctions in differences between our two predictions from our models, but that our original model performs better than our robust regression technique.
+Now for PLS,
+```{r PLS}
+  library(pls)
+  plsModel <- plsr(likeCount ~ tweetId + replyCount + retweetCount + followerCount + sentiments + accessPoint + textLength + mentions, data = dfTrain, scale=TRUE, validation="CV")
+  pred1 <- predict(plsModel, dfPredict)
+  pred2 <- predict(lmod, dfPredict)
+  rmse(pred1, dfPredict$likeCount)
+  rmse(pred2, dfPredict$likeCount)
+```
+The two models perform about the same but our original model seems to perform a bit better when considering our RMSE. Now Principal Component,
+```{r principal component analysis}
+  twitterPC <- prcomp(dfTrain)
+  summary(twitterPC)
+  plot(round(twitterPC$sdev/3.098508e+17, 2)*100)
+```
+THis tells us that all of our variance lies in one of our principal component.
 
 
 
