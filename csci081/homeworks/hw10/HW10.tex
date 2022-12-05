@@ -1,0 +1,77 @@
+\documentclass[12pt]{article}
+\usepackage{geometry}
+\usepackage{enumerate}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{etoolbox}
+\usepackage{graphicx}
+\usepackage{framed}
+
+\newbool{solutions}
+\newbool{grading}
+\booltrue{solutions}
+%\boolfalse{solutions}
+%\booltrue{grading}
+\newcommand{\LL}{\text{L}}
+
+\newcommand{\Problem}[3]{\mbox{} \newline \noindent \textbf{\textbf{Challenge #1: #2 [#3 Points] \\ }}}
+\newcommand{\WTP}[1]{\begin{framed} \noindent \textbf{What's This Problem Teaching?} #1 \end{framed}}
+\newrobustcmd{\Solution}[1]{\ifbool{solutions}{\mbox{} \newline \noindent \textbf{Solution:} #1}{}}
+\newrobustcmd{\Grading}[1]{\ifbool{grading}{\mbox{} \newline \noindent \textbf{Grading Guidelines:} #1}{}}
+
+\begin{document}
+
+\begin{center}
+	\bf
+	Logic and Computability \\
+	Homework 10:  Reductions and Decidability \\
+\end{center}
+
+\noindent \textbf{Please read Handout 5 on reductions before getting started.  It demonstrates what's required in these proofs.}
+
+\Problem{1}{Proving that Languages are Undecidable}{40}
+
+Prove that each of the following languages is not decidable (aka not ``recursive'') by
+describing reductions from the Halting Problem. 
+        \begin{enumerate}
+        	   	\item $L_{42} =  \{ \langle M\rangle \mid  \mbox{$|\LL(M)| = 42$} \}$.  That is, $M$ accepts exactly $42$ different inputs.
+	            \item $L_{union} = \{ \langle M_{1}, M_{2}, M_{3} \rangle \mid \LL(M_{1}) \cup \LL(M_{2}) = \LL(M_{3}) \}$.
+        \end{enumerate}
+
+\subsection*{Answer 1:}
+\begin{enumerate}
+	\item We show that $L$ is undecideable by a reduction from $L_{halt}$. By wasy of contradiction, assume that $L$ is decideable. Then, we construct a decider for $L_{halt}$ as follows: 
+	Let $M_h$ be our built decider. Our input will be $<M>, w$, and when $M_h$ is given the input, we will first feed that input to a machine called $M'$-builder that produces the encoding of a new 
+	TM, $M'$. Let $x$ denote the input to $M'$. The TM $M'$ has states that move the tape head to a blank region of the tape (either to the left or right of the string), and then writes $<M>,w$ on the tape.
+	Next $M'$ simulates the execution of $M$ on $w$ beign careful to stay away from $x$ by moving $x$ whenever the simulation of $M$ on $w$ would touch it. If the simulation of $M$ halts on $w$, then $M'$ moves its 
+	tape head back to the front of the string $x$ and then checks if $x$ is the string for representing a TM, $M$ such that $<M>$, $|L(M)| = 42$. This concludes the construction of $M'$. We do not run $M'$, we only construct its TM code. Now, we take that code for $<M'>$ and feed it to the decider for $L$.
+	If the decider for $L_{42}$ accepts $<M'>$, then $M_h$ accepts its own input $<M>, w$ and otherwise rejects it.\\\\
+	Now, we prove that $M_h$ is indeed a halt checker and thus a decider for $L_{halt}$. Notice that $L(M')$ is either the empty set or $L_{42}$. Therefore, if the decider for $L$ accepts $M'$ then it must mean that $L(M')$ is $L_{42}$
+	and thus $M$ halts on $w$ or if the decider for $L$ rejects $M'$, then $L(M') \neq L_{42}$ and $L(M') = \emptyset$. Therefore, we have shown that a decider for $L$ allows us to construct a decider for $L_{halt}$ which is a contradiction.
+	\item We show that $L$ is undecideable by a reduction from $L_{halt}$. By way of contradiction, assume that $L$ is decideable. Then, we construct a decider for $L_{halt}$ as follows: Let $M_h$ be our built decider. Our input will be $<M>,w$ and when $M_h$ is given the input,
+	we will first feed that input to a machine called $M'$-builder that produces the encoding of a new TM, $M'$. The TM, $M'$ has states that move the tape head to a blank region of the tape, and then writes $<M>, w$ on the tape. Next, $M'$ simulates the execution of $M$ on $w$ being careful to stay away from $x$ by moving $x$ whenever the simulation of $M$ on $w$ would touch it.
+	If the simulation of $M$ halts on $w$ then $M'$ moves its tape head back to the front of the string and then checks if $x$ is the encoding of three TMs, $M_1, M_2, M_3$ such that the union of the languages of the first and the second are the language of the third TM. This concludes the construction of $M'$. We do not run $M'$, we only construct its TM code. Now, we take that code for $<M'>$ and feed it to the decider for $L$. If the decider for $L_{union}$. If accepted, $<M'>$, then $M_h$ accepts its own input $<M>, w$ and otherwise rejects it.\\\\
+	Now that we prove that $M_h$ is indeed a halt checker and thus a decider for $L_{halt}$. Notice that $L(M'$ is either the empty set or $L_{union}$. Therefore if the decider for $L$ accepts $M'$ then it must mean that $L(M') = L_{union}$ and thus $M$ halts on $w$ or if the decider for $L$ rejects $M'$ then $L(M') \neq L_{union}$ and $L(M') = \emptyset$. Therfore we have shown that a decider for $L$ allows us to construct a decider for $L_{halt}$ which is a contradiction.
+\end{enumerate}
+
+\Problem{2}{Virus Detection is Undecidable!}{60}
+
+You've been hired as a summer intern at Macrosoft, a leading software company. You and your team have been tasked to write a program that detects the notorious ``42 virus.''  This virus attacks its computer by placing the binary representation of the number 42 somewhere in the computer's memory. It's known that if this binary string ever appears in memory, the processor will superheat and melt to a smelly liquid mush.  The task is to write a virus detector program $V$ that takes any program $M$ as input and determines whether or not $M$ contains the virus (that is, writes the number 42 in memory).
+
+After months of effort and many failed attempts to build the virus detector, your team asks you for help. You look at the problem and suspect that it's impossible to solve. Your task is now to prove it.  To do so, let's abstract this to a Turing machine problem so that we can be more precise and rigorous. That is, show that the following language is undecidable:
+\small
+\[
+    L_{virus} = \{ \langle M\rangle \mid \mbox{$\exists x$ s.t.\ on input $x$, $M$ writes 42 in binary on its tape during its computation.} \}
+\]
+\normalsize
+Notice that we don't care if $M$ runs forever or not. We just want to know if there is some input which causes it to write the virus on the tape at any time during its computation. 
+Prove that $L_\emph{virus}$ is undecidable by describing a reduction from the Halting Problem.
+
+\textbf{Note:}  This result implies that a perfect virus detector cannot exist! That doesn't mean that we can't write a virus detector that detects \emph{some} occurrences of a virus in \emph{some} programs, but it does imply that detecting \emph{every} possible occurrence of a given virus  in \emph{any} program is impossible.
+
+\subsection*{Answer 2:}
+We show that $L$ is undecidable by a reduction from $L_{halt}$. By way of contradiction, assume that $L$ is decideable. Then, we construct a decider for $L_{halt}$ as follows: Let $M_h$ be our built decider. Our input will be $<M>, w$ and when $M_h$ is given the input, we will first feed the input to a machine called $M'$-builder that produces the encoding of a new TM, $M'$. The TM, $M'$ has states that move the tape head to a blank region of the tape and then writes $<M>, w$ on the tape. Next $M'$ simulates the execution of $M$ on $w$ being careful to stay away from $x$ by moving $x$ whenevr the simulation of $w$ would touch it. If the simulation of $M$ halts on $w$ then $M'$ moves its tape head back to the front of the tape head back to the front of the string 
+and then checks if $x$ is the encoding of one of our TMs that contains the virus in question. This concludes the construction of $m'$. We do not run $M'$, we only construct its TM code. Now we take the code for $<M'>$ and feed it to the decider for $L$. If the decider for $L_{virus}$ accepts $<M'>$, then $M_h$ accepts its own input $<M>$, otherwise it rejects.\\\\
+Now that we prove that $M_h$ is indeed a halt checker and thus a decider for $L_{halt}$. Notice that $L(M')$ is either the empty set and $L_{virus}$. Therefore if the decider for $L_{virus}$ accepts $M'$, then it must mean that $L(M')= L_{virus}$ and thus $M$ halts on $w$ or if the decider for $L$ rejects $M'$ then $L(M')\neq L_{virus}$ and $L(M') = \emptyset$. Therefore, we have shown that a decider for $L$ allows us to construct a decider for $L_{halt}$ which is a contradiction.I
+
+\end{document}

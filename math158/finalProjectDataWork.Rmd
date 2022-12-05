@@ -4,6 +4,10 @@ author: "Joshua Jansen-Montoya"
 date: '2022-11-26'
 output: pdf_document
 ---
+### Abstract
+
+### Introduction
+In our investigation, we were interested in understanding how the like count of an individuals tweets can be affected by their other actions on the app, Twitter. More specifically, given the recent relevance of Elon Musk's purchase of Twitter and his status as an inflammatory figure who has both been on the platform for an extensive amount of time, who is currently active and who garners a large amount of attention on the platform, we thought he would be a perfect case study of this phenomenon. Our motivating question for our investigation was to understand how do different metrics of Elon's tweets e.g. their retweet count, their length, and the AI (RoBERTa) generated sentiment of the tweet which attempts to provide a metric of the emotional sentiment of the tweet. We attempted to model the amount of likes that a tweet would obtain using a linear model 
 
 ### Data Transformation
 Transforming the different columns in our data set to more useful numeric metrics:
@@ -139,16 +143,34 @@ Now for PLS,
   plsModel <- plsr(likeCount ~ tweetId + replyCount + retweetCount + followerCount + sentiments + accessPoint + textLength + mentions, data = dfTrain, scale=TRUE, validation="CV")
   pred1 <- predict(plsModel, dfPredict)
   pred2 <- predict(lmod, dfPredict)
+  summary(plsModel)
   rmse(pred1, dfPredict$likeCount)
   rmse(pred2, dfPredict$likeCount)
 ```
 The two models perform about the same but our original model seems to perform a bit better when considering our RMSE. Now Principal Component,
 ```{r principal component analysis}
-  twitterPC <- prcomp(dfTrain)
+  twitterPCA <- prcomp(dfTrain)
   summary(twitterPC)
   plot(round(twitterPC$sdev/3.098508e+17, 2)*100)
+  modelPCA <- lm(likeCount ~ twitterPCA$x[,1:2], dfTrain)
+  #summary(modelPCA)
 ```
-THis tells us that all of our variance lies in one of our principal component.
+Can find our first two PCA components for our model as follows,
+```{r PCA components}
+  loadings <- eigen(cov(dfTrain))$vectors
+  explvar <- loadings^2
+  explvar
+```
+Thus, we can see that for this, we only care about variables 1,2,3,4,6,7,8,9 for our first 2 PCAs.s
+```{r comparing pca}
+  dfPredictPCA <- data.frame(dfPredict$)
+  pred1 <- predict(modelPCA, dfPredict)
+  pred2 <- predict(lmod, dfPredict)
+  summary(plsModel)
+  rmse(pred1, dfPredict$likeCount)
+  rmse(pred2, dfPredict$likeCount)
+```
+This tells us that all of our variance lies in one of our principal component.
 
 
 
