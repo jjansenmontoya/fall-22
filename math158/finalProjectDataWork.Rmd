@@ -10,6 +10,7 @@ output: pdf_document
 In our investigation, we were interested in understanding how the like count of an individuals tweets can be affected by their other actions on the app, Twitter. More specifically, given the recent relevance of Elon Musk's purchase of Twitter and his status as an inflammatory figure who has both been on the platform for an extensive amount of time, who is currently active and who garners a large amount of attention on the platform, we thought he would be a perfect case study of this phenomenon. Our motivating question for our investigation was to understand how do different metrics of Elon's tweets e.g. their retweet count, their length, and the AI (RoBERTa) generated sentiment of the tweet which attempts to provide a metric of the emotional sentiment of the tweet. We attempted to model the amount of likes that a tweet would obtain using a linear model 
 
 ### Data Transformation
+
 Transforming the different columns in our data set to more useful numeric metrics:
 Mapping each tweet to the number of characters in each tweet
 ```{r text -> text length}
@@ -65,6 +66,14 @@ Now rebinding all of our variables of interest into a new data frame to be used 
   dfTrain <- df[-seq(1., NROW(df), by = 17),]
   dfPredict <- df[seq(1., NROW(df), by = 17),]
 ```
+
+```{r box plots}
+  boxplot(df$sentiments, xlab = "sentiments")
+  boxplot(df$textLength, xlab = "textLength")
+  boxplot(df$likeCount, xlab = "likeCount")
+  boxplot(df$retweetCount, xlab = "retweetCount")
+```
+
 Generating an initial linear model to answer our question of how likeCount is affected by the other variables, we obtain that,
 ```{r intial linear model}
   lmod <- lm(likeCount ~ tweetId + replyCount + retweetCount + friendCount + followerCount + sentiments + accessPoint + textLength + mentions + location + verified + userName, data = dfTrain)
@@ -79,7 +88,13 @@ Now, we can apply our step function as follows,
 ```{r step function}
   step(lmod1)
 ```
-giving us the following linear model,
+giving us the same linear model. now try backward elimination for followerCount,
+```{r backward elimination}
+  lmodRed <- lm(likeCount ~ tweetId + replyCount + retweetCount + sentiments + accessPoint + textLength + mentions, data = dfTrain)
+  summary(lmodRed)
+  anova(lmod1, lmodRed)
+```
+
 ```{r lmod creation for our data points}
   lmod<-lm(likeCount ~ tweetId + replyCount + retweetCount + followerCount + sentiments + accessPoint + textLength + mentions, data = dfTrain)
 ```
@@ -115,14 +130,7 @@ Now to calculate the condition numbers and VIF for our model,
 Our vif numbers indicate little  collinearity between our different predictor variables, but we can see that our condition numbers are super high because of the fact that it appears that although all of our variables are highly significant, some are far more significant than others, e.g. accessPoint vs. TweetID.
 Now, can check our model to see if our variables meet our assumptions. First checking for normality of our variables, will check with sample of 
 ```{r checking normality assumptions}
-  shapiro.test(sample(tweetId, 5000, replace = FALSE, prob = NULL))
-  shapiro.test(sample(replyCount, 5000, replace = FALSE, prob = NULL))
-  shapiro.test(sample(retweetCount, 5000, replace = FALSE, prob = NULL))
-  shapiro.test(sample(sentiments, 5000, replace = FALSE, prob = NULL))
-  shapiro.test(sample(accessPoint, 5000, replace = FALSE, prob = NULL))
-  shapiro.test(sample(textLength, 5000, replace = FALSE, prob = NULL))
-  shapiro.test(sample(mentions, 5000, replace = FALSE, prob = NULL))
-  shapiro.test(sample(likeCount, 5000, replace = FALSE, prob = NULL))
+  shapiro.test(sample(resid(lmod), 5000, replace = FALSE, prob = NULL))
 ```
 We can see that for each of our random samples, it appears that our variable distributions are not normal and thus, some of our assumptions for our model are not met. 
 
@@ -131,29 +139,28 @@ Doing the Least Trimmed Squares method,
 ```{r lts method}
   rmse <- function(x,y) sqrt(mean((x-y)^2))
   ltsmod <- ltsreg(likeCount ~ tweetId + replyCount + retweetCount + followerCount + sentiments + accessPoint + textLength + mentions, data = dfTrain)
-  pred1 <- predict(ltsmod, dfPredict)
-  pred2 <- predict(lmod, dfPredict)
-  rmse(pred1, dfPredict$likeCount)
-  rmse(pred2, dfPredict$likeCount)
+  library(pls)
+  plsModel <- plsr(likeCount ~ tweetId + replyCount + retweetCount + followerCount + sentiments + accessPoint + textLength + mentions, data = dfTrain, scale=TRUE, validation="CV")
+  predPLS <- predict(plsModel, dfPredict)
+  predLmod <- predict(lmod, dfPredict)
+  predLTS <- predict(ltsmod, dfPredict)
+  print("Original Model:")
+  rmse(predLmod, dfPredict$likeCount)
+  print("LTS Model:")
+  rmse(predLTS, dfPredict$likeCount)
+  print("predPLS")
+  rmse(predPLS, dfPredict$likeCount)
+  plot(RMSEP(plsModel))
 ```
 Notice some large distinctions in differences between our two predictions from our models, but that our original model performs better than our robust regression technique.
 Now for PLS,
-```{r PLS}
-  library(pls)
-  plsModel <- plsr(likeCount ~ tweetId + replyCount + retweetCount + followerCount + sentiments + accessPoint + textLength + mentions, data = dfTrain, scale=TRUE, validation="CV")
-  pred1 <- predict(plsModel, dfPredict)
-  pred2 <- predict(lmod, dfPredict)
-  summary(plsModel)
-  rmse(pred1, dfPredict$likeCount)
-  rmse(pred2, dfPredict$likeCount)
-```
 The two models perform about the same but our original model seems to perform a bit better when considering our RMSE. Now Principal Component,
 ```{r principal component analysis}
   twitterPCA <- prcomp(dfTrain)
   summary(twitterPC)
   plot(round(twitterPC$sdev/3.098508e+17, 2)*100)
   modelPCA <- lm(likeCount ~ twitterPCA$x[,1:2], dfTrain)
-  #summary(modelPCA)
+  summary(modelPCA)
 ```
 Can find our first two PCA components for our model as follows,
 ```{r PCA components}
@@ -163,7 +170,6 @@ Can find our first two PCA components for our model as follows,
 ```
 Thus, we can see that for this, we only care about variables 1,2,3,4,6,7,8,9 for our first 2 PCAs.s
 ```{r comparing pca}
-  dfPredictPCA <- data.frame(dfPredict$)
   pred1 <- predict(modelPCA, dfPredict)
   pred2 <- predict(lmod, dfPredict)
   summary(plsModel)
