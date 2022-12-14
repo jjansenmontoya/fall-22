@@ -1,0 +1,74 @@
+\documentclass[10pt]{article}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb, graphicx, multicol, array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\date{Due: Dec. 9, 2022 10pm PT}
+
+\begin{document}
+ 
+\title{Assignment 8}
+\author{
+CS 181AG: Network Algorithmics}
+\maketitle
+
+This assignment will give you practice reading academic papers critically and understanding the main points. If you have not yet read ``How to Read a Paper'' (linked on the course webpage), I strongly encourage you to do so before starting this assignment. It will save you time, as the goal in this assignment is to parse the important information \emph{without} reading every word of the paper. 
+
+\begin{problem}{1: Reading}
+Read each of the following papers about video processing. For each, answer the questions below.
+
+Video Streaming: \href{https://web.mit.edu/pensieve/content/pensieve-sigcomm17.pdf}{Pensieve}
+
+Video Conferencing: \href{https://www.usenix.org/system/files/conference/nsdi18/nsdi18-fouladi.pdf}{Salsify}
+
+Video QoS: \href{https://people.csail.mit.edu/vibhaa/files/minerva.pdf}{Minerva}
+
+\begin{enumerate}
+    \item What problem does this paper aim to solve?
+    \item Why is it a hard problem to solve?
+    \item What is the key insight of their solution? 
+    \item What is one aspect of the paper you liked? What is one that you thought could be improved?
+\end{enumerate}
+\end{problem}
+\subsection*{Answer 1:}
+\begin{enumerate}
+    \item What problem did this paper aim to solve? \begin{enumerate}
+        \item Pensieve: The problem that this paper aimed to solve was the problem of providing content providers with a better method for delivering consistently high-quality video to viewers by providing a more flexible alternative to fixing the decided upon ABR algorithm in order to counter these issues and to provide a more general solution to answer the question of providing high quality streaming as many ABR algorithms require fine tuning for a particular network.
+        \item Salsify: The problem that this paper aimed to solve was the problem of the speed at which Internet real-time video can response to variable network conditions in a manner that does not provoke packet loss or queueing delays.
+        \item Minerva: The problem that this paper aimed to solve was the issue of clients who are connected to the same video content providers having to compete for bandwidth which can cause inconsistent QoE and having multiple clients being stuck at the same bottleneck in a network. Thus, the goal of this paper was to find a way in which to optimize QoE for multiple users connected to the same provider.
+    \end{enumerate}
+    \item Why is it a hard problem to solve? \begin{enumerate}
+        \item Pensieve: This is a hard problem to solve due to the fact that network conditions can fluctuate over time which can make predictions difficult for a RL model, many of the goals that we could set up for an RL model/general ML model are inherently conflicting with one another which forces us to focus on one or the other along with the fact that not all users emphasize the same QoE metrics.
+        \item Salsify: This is a hard problem to solve due to the fact that packet loss and queueing delays are very common and effective techniques in minimizing network latency and because of the fact that real-time video streams are highly dependent on the speed at which packets can be sent and how up to date all of the packets are. This is also a difficult problem to solve due to a lot of the optimizations that have already been done to the video codecs that the author argues gives diminishing returns.
+        \item Minerva: This is a hard problem to solve due to the fact that clients want their connections to remain private making the issue of sharing information necessary to optimize connections an important one. It is also a hard problem to solve due to the fact that QoE can vary based on the type of device that one used, the type of content that one views, even the chunk of the video that one is viewing.
+    \end{enumerate}
+    \item What is the key insight of their solution? \begin{enumerate}
+        \item Pensieve: The key insight of their solution was that rather than using a singular ABR algorithm for a network that relied on preset and fixed rules, the researchers could learn/generate an ABR using a RL model by learning from a reward based off of some QoE/metric used to determine the reward that would be inputted back into the model to update the set of bitrate decisions. The author emphasizes the ability of the RL model to learn from performance rather than relying on a simplified system.
+        \item Salsify: The key insight of their solution was that rather than treating the codecs as a seperate component, it is instead integrated into the system. The authors claim that instead of treating congestion control and and frame-rate-control algorithms as seperate, they are instead combined into a singular algorithm to "avoid provoking in-network buffer overflows or queueing delays, by matching its video transmissions to the network's varying capacity". Similarly, the authors argue that Salsify improves on existing systems by "achieving accurate estimates of network capacity without a "full throttle" source and experimentation with multiple settings for each frame as well.
+        \item Minerva: The key insight of their solution was that rather than consider the problem from the paradigm of optimizing for viewer experience by allocating bandwith in isolation for users versus optimizing for viewer experience by allocating bandwidth between video clients such as Netflix and YouTube. The goal of Minerva is not solely QoE for an individual, but for QoE fairness for multiple clients connected to the same video source by ensuring that viewing experience does not vary greatly between consumers.
+    \end{enumerate}
+    \item What is one aspect of the paper you liked? What is one that you thought could be improved? \begin{enumerate}
+        \item Pensieve: One aspect of the paper that I liked was the fact that they were able to implement this model in the real world and demonstrate improvements, as a lot of the papers that we have read about this past year have been largely theoretical and lacked the actual application of the methods or models explained in their papers. One thing that I think could be improved in the paper is some of the explanation of how a user of the model may decide which QoE metric they may choose for their model as it seemed to me that this was also an earlier mentioned problem with many being adversarial to one another as well different users caring about different metrics.
+        \item Salsify: One aspect of the paper that I liked was the extensiveness of the experiments that the authors utilized and how the data was arranged in the figures. I felt as though a lot of the figures in Section 5 were very easy to understand and were effective in communicating the successes of the consolidation. I thought that some of the mentioned limitations diminished the quality of their work such as the fact that they did not use audio which seems imperative for real-time video such as sports broadcasts, and thus, is a very strong limiting factor in my opinion.
+        \item Minerva: One aspect of the paper that I liked was the idea of "buffer pool" and the concept of because one client may have a low buffer and be succeptible to constant rebuffering be able to utilize the larger buffers of other video clients without adverse effects on the network. However one aspect that I thought could be improved upon was the idea about precomputing the value function for a video. Give the extensive number of videos that exist on the internet and the value function is being pre-computed, this implies to me that it must be stored somewhere which makes me wonder how this is done and how can the function be searched for efficiently so as to not consume extensive amounts of time, especially when a video is just clicked on.
+    \end{enumerate}
+\end{enumerate}
+
+
+\begin{problem}{2}
+How long did this assignment take you?
+\end{problem}
+\subsection*{Answer 2:}
+This assignment took me $\approx 4$ hours.
+\end{document}
+
+
+

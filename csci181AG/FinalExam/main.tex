@@ -1,0 +1,189 @@
+\documentclass[10pt]{article}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb, graphicx, multicol, array, multirow, subfig}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage[table]{xcolor}
+\usepackage{ctable}
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{problem}[2][]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\date{Due: Friday, Dec 16, 2022 10pm PT}
+
+\begin{document}
+ 
+\title{Fall 2022: Final Exam}
+\author{
+CS 181AG: Network Algorithmics}
+\maketitle
+
+Under the Honor Code, this document is not to be shared with anyone.
+
+\begin{itemize}
+
+\item The exam will be made available on Gradescope on Saturday, Dec 10th, 2022 at 8am PT. It will be due Friday, Dec 16th, 2022 at 10pm PT through Gradescope. Please ensure you leave enough time for the submission process as there is no late allowance for the exam.
+
+\item During the exam, you will have access to your course materials: lecture slides, videos, assignments, textbook, midterm, and photos of board work from class. You may not access ANY other resources, including other websites, textbooks, or people.
+
+\item Though the exam will be untimed, you will be expected to take it in one sitting. However, you may
+take short breaks as needed, e.g. to rest your eyes, grab a snack, change background music, or use the
+restroom. Long breaks that include a substantial context switch (e.g. working on another assignment,
+having an extended conversation with someone, leaving the area where you’re taking the exam) are
+not allowed.
+
+\item You should not contact anyone, including Prof. Arthi, during the exam period. If you have unresolved
+questions about the exam, you may include a note about your question and the assumption you made
+to address it. Such notes will be taken into consideration when grading the exam.
+
+\item Your exam will be submitted as a PDF. You may answer questions, fill in tables, etc by handwriting, using LaTeX, or any other method you use for your assignments. As with all assignments, you will need to mark the answer regions in Gradescope.
+
+\item The exam will be scored out of 100 points over 7 questions, divided by topic.
+
+\end{itemize}
+
+\newpage
+\begin{problem}{1: Link-State Infinite Loops}
+\item In class, we discussed two types of routing protocols, distance-vector and link-state. Assume that the network below is running a link-state protocol, and each node has calculated its shortest path to each other node and is forwarding packets accordingly.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.6]{figures/link_state.pdf}
+    \label{fig:link_state}
+\end{figure}
+
+\begin{enumerate}
+    \item Describe a series of events (e.g., a link goes down, a node recalculates its routes) that would lead to a packet looping infinitely between R2 and R3.
+    \item Describe a series of events (e.g., a link goes down, a node recalculates its routes) that would lead to a packet looping infinitely between R1 and R2.
+    \item True or False: link-state protocols require less memory than distance-vector. Explain your reasoning. 
+\end{enumerate}
+
+\end{problem}
+
+\begin{problem}{2: Longest Matching Prefix Caching}
+Your friend proposes a scheme to find the longest-matching-prefix using caching. This is their plan: keep a small set of prefixes in a cache. When a packet arrives,  run a longest-matching-prefix search within the cache. If a prefix is found, return the next hop corresponding to the prefix. If no prefix is found, run a longest-matching-prefix search across the rest of the database, return the next hop corresponding to the longest matching prefix, and insert the longest matching prefix into the cache. \\\\
+You realize that your friend's plan has a fundamental flaw. Explain the flaw and give an example where your friend's scheme would return an incorrect answer.
+\end{problem}
+\begin{problem}{3: Switching}
+Consider a router with the following sets of input and output ports. The queues of packets are shown next to each input. As in class, the number denotes which output queue the packet is intended for, and the head of the queue is at the right (i.e., the head of A's queue is 1).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.6]{figures/islip.pdf}
+    \label{fig:islip}
+\end{figure}
+
+\begin{enumerate}
+    \item The router is using the \textbf{iSLIP} algorithm. Assume that the algorithm is just starting, so all grant and accept pointers start at their initial positions. Which input ports send to which output ports in Round 1? For each matched pair, specify in which iteration they were matched. 
+    \item Where are the accept pointers for input ports A, B, and C after Round 1? Where are the grant pointers for output ports 1, 2, and 3 after Round 1?
+\end{enumerate}
+\end{problem}
+\begin{problem}{4: TCP Connection}
+Node 1 wants to send a 5 byte message (which can all be sent in one packet) over TCP to Node 2 at port 25. They currently do not have a TCP connection open. Node 1 is behind a router which implements Network Address Translation, with the public/private IP addresses shown in Figure \ref{fig:tcp-setup}, and Node 2 is out of the network and directly connected to the router, with its IP address also shown in Figure \ref{fig:tcp-setup}.
+
+\begin{figure*}[ht]
+\centering
+
+\subfloat[]{%
+  \includegraphics[scale=0.6]{figures/tcp_connection.pdf}%
+  \label{fig:tcp-setup}%
+}\qquad
+\subfloat[]{%
+  \includegraphics[scale=0.5]{figures/tcp_communication.pdf}%
+  \label{fig:tcp-communication}%
+}
+\label{fig:tcp}
+\caption{Topology (a) and first four packets (b) for Nodes 1 and 2}
+
+\end{figure*}
+
+Figure \ref{fig:tcp-communication} shows the first four packets sent in this exchange. Packet 4 acknowledges that Node 2 received Packet 3, the 5-byte message.
+
+Fill out the table below showing a subset of the packet header for each of the four packets. For each packet, there are two rows, one for each link: between Node 1 and the router (Link A), and between the router and Node 2 (Link B). The links are shown in the order the packet traverses them (Packet 1 is sent from Node 1 across Link A to the router, and then from the router across Link B to Node 2, hence Link A is listed before Link B). For columns 3-8, write the IP or number. For the last 2 columns, put an x if the corresponding flag is set. The first row is filled out for you as an example.
+ \\
+Notes: 
+\begin{enumerate}
+    \item You may leave some entries blank if they don't correspond to meaningful information.
+    \item Please make up a (valid) port number where applicable, but remember to be consistent about your use of this number in subsequent communications.
+\end{enumerate}
+
+\setlength\extrarowheight{8pt}
+\begin{table}[ht]
+    \begin{center}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+    	\hline
+    	  Packet & Link & Src IP & Dst IP & Src Port & Dst Port & Seq Num & Ack Num & SYN & ACK \\
+    	\hline
+    	Packet 1 & Link A & 192.168.1.2 & 124.10.1.2 & 17500 & 25 & 0 & & x &\\
+    	\hline
+    	Packet 1 & Link B & & & & & & & &\\
+    	\specialrule{.3em}{.2em}{.2em}
+             Packet 2 & Link B & & & & & & & &\\
+    	\hline
+    	  Packet 2 &  Link A & & & & & & & &\\
+    	\specialrule{.3em}{.2em}{.2em}
+            Packet 3 &  Link A & & & & & & & &\\
+    	\hline
+    	  Packet 3 & Link B & & & & & & & &\\
+    	\specialrule{.3em}{.2em}{.2em}
+            Packet 4 & Link B & & & & & & & &\\
+    	\hline
+    	  Packet 4 &  Link A & & & & & & & &\\
+    	\specialrule{.3em}{.2em}{.2em}
+    	
+    \end{tabular}
+    \end{center}
+    \end{table}
+
+
+\end{problem}
+\newpage
+\begin{problem}{5: TCP Congestion Control}
+Your computer and your friend's computer are communicating using a TCP connection. After the 3-way handshake, the window size is 1. Your computer sends Packet 1 to your friend's computer, and its receipt is acknowledged. The window size is now 2. Then, your computer sends Packets 2 and 3 to your friend's computer, and those are acknowledged as well. The window size is now 4. Then, your computer sends Packets 5, 6, 7, and 8, and all are successfully received by your friend's computer \textbf{except Packet 5}.
+\begin{enumerate}
+    \item Assume your friend's computer sends an ack packet in response to receiving each packet: 6, 7, and 8, so 3 packets in total. What is the ack number of each of these packets?
+    \item If we observe all the routers on the route between the two computers, we see that all of them have room in their input queues and output queues, i.e., none are completely full. Describe why a non-full router could still drop Packet 5.
+    \item Based on the ack numbers of Packets 6, 7, and 8 (which you filled out in part 1), your computer realizes there there is congestion and resends Packet 5, which this time successfully reaches and is acknowledged. Which packets can be sent next before receiving any more acks? (Note: resending Packet 5 does not affect the window size). Explain your response.
+    \item Let's say the packets sent in your response to part 3 were successfully sent and acknowledged. Which packets can be sent next before receiving any more acks? Explain your response.
+\end{enumerate}
+\end{problem}
+\newpage
+\begin{problem}{6: Balancing Flow}
+Consider a single output queue at a router that contains 3 different flows. The packets that need to be sent for each flow are shown below, each labelled with the number of Mb in the packet. As in class, the front of the queue is at the right.
+
+We want each flow to send at an long-term rate of 4Mbps with a burst size of no more than 6Mb. Therefore, we use deficit round robin (where 1 token = 1Mb). We give each flow a bucket that can hold at most 6 tokens, and we give each flow 4 tokens at the beginning of each round.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.8]{figures/drr.pdf}
+    \label{fig:bin_search}
+\end{figure}
+\begin{enumerate}
+    \item Which packets get sent in the first round of the round robin and in what order? Denote the packets using the [flow ID]-[size] format, e.g., 1-2 is a packet from Flow 1 with size 2.
+    \item Before the second round of the round robin, after you adjust each flow’s token bucket (so they’re now ready to send again), how many tokens are in each flow’s bucket? Assume that no additional packets arrive.
+    \item Suppose we want to adjust our per-flow long-term rates so that the total rate for the output queue stays the same (12Mbps), but Flow 1 now gets 50\% of that total rate, while Flows 2 and 3 split the remainder. Flow 1 also now gets a max burst size of 10Mb, and Flows 2 and 3 should still have a max burst size of 6Mb. What is the size of each flow's bucket? How many tokens does each flow get at the beginning of each round?
+\end{enumerate}
+\end{problem}
+\begin{problem}{7: DNS lookups}
+Suppose your device wants to send an HTTP request to the HMC server and get back a response (each 1 packet). However, all DNS caches are initially empty (including your device’s DNS resolver's cache). Each trip between device/server and server/server takes exactly 5ms, so each round trip takes 10ms.
+
+\begin{enumerate}
+    \item How long does it take for your device to get the IP address of the HMC server? 
+    \item Once your device has the IP address of the HMC server, how long does it take to get the HTTP response?
+\end{enumerate}
+
+There may be multiple correct answers - any are acceptable. Hint: remember which protocol is used for each step. Show your work!
+    
+\end{problem}
+\begin{problem}{8}
+How long did this exam take you? How would you rate the difficulty on a scale from 1-10 (10 being the hardest)? Feel free to share any other thoughts on the final, or your preparation, or this class. \\\\
+Congratulations on finishing all requirements for CS181AG! I hope you learned a lot this semester and that you have a restful holiday season :) 
+
+
+\end{problem}
+\end{document}
+
